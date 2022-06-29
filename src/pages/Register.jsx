@@ -26,7 +26,7 @@ import { sampleSelector} from '../redux/slice';
   const [secureTextEntry, setSecureTextEntry] = useState(true);;
 
   const { sample } = useSelector(sampleSelector);
-  console.log("sample", sample.status);
+  console.log("register", sample?.status);
 
   const formik = useFormik({
     initialValues: {

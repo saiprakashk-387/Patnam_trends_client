@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector } from "react-redux";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -21,11 +21,16 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import { lightGreen } from "@mui/material/colors";
+import { loginApi } from "../API/Api";
+import { sampleSelector} from '../redux/slice';
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const { sample } = useSelector(sampleSelector);
+  console.log("lgin", sample?.data?.token);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -36,8 +41,9 @@ function Login() {
       password: yup.string().required("Password is required").min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-        console.log("data",data);
-    //   await dispatch(loginAction(data, navigate));
+      await dispatch(loginApi(data).then((res)=>{
+       navigate("dashboard")
+      }));
     },
   });
 
