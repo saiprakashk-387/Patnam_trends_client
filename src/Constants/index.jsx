@@ -1,0 +1,1 @@
+export const registerUrl= "https://patnam-trends-botique.herokuapp.com/api/register";
