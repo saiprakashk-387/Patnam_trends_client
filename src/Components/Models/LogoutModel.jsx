@@ -7,6 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function PaperComponent(props) {
   return (
@@ -21,7 +23,11 @@ function PaperComponent(props) {
 
 export default function LogoutModel(props) {
   const { open, handleClose } = props;
-
+  const handleLogout = () => {
+    sessionStorage.clear();
+    handleClose();
+    toast.success("Logout Succesfully");
+  };
   return (
     <div>
       <Dialog
@@ -31,18 +37,17 @@ export default function LogoutModel(props) {
         aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-        Logout
+          Logout
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-           Do you want to logout.
-          </DialogContentText>
+          <DialogContentText>Do you want to logout.</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleClose} >Ok</Button>
+          {/* <Button onClick={handleClose} >Ok</Button> */}
+          <Button onClick={handleLogout}>Ok</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation ,useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -28,6 +28,7 @@ import LogoutModel from "../Models/LogoutModel";
 const drawerWidth = 200;
 
 function Header(props) {
+  const navigate = useNavigate();
   const { window } = props;
   const location = useLocation();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -76,6 +77,10 @@ function Header(props) {
   const handleCloseLogoutModel = () => {
     setOpenLogoutModel(false);
   };
+  const handleOpenProfile=()=>{
+    navigate("/myprofile")
+    handleMenuClose()
+  }
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -93,7 +98,8 @@ function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
+      <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>
         {" "}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
-import { useDispatch ,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -22,14 +22,17 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import { lightGreen } from "@mui/material/colors";
 import { loginApi } from "../API/Api";
-import { sampleSelector} from '../redux/slice';
+import { sampleSelector } from "../redux/slice";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { sample } = useSelector(sampleSelector);
-  console.log("lgin", sample?.data?.token);
+  sessionStorage.setItem("userToken",sample?.data?.token)
+  sessionStorage.setItem("name",sample?.data?.user?.email)
+  // console.log("lgintoken", sample);
+  // console.log("sampolelgintoken", sample);
 
   const formik = useFormik({
     initialValues: {
@@ -38,12 +41,13 @@ function Login() {
     },
     validationSchema: yup.object({
       email: yup.string().email().required("Email is required"),
-      password: yup.string().required("Password is required").min(6, "6 characters required"),
+      password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-      await dispatch(loginApi(data).then((res)=>{
-       navigate("dashboard")
-      }));
+      await dispatch(loginApi(data ,navigate));
     },
   });
 
@@ -51,15 +55,16 @@ function Login() {
     setSecureTextEntry(!secureTextEntry);
   };
   return (
-    <Box fixed
+    <Box
+      fixed
       sx={{
         overflow: "hidden",
-        height:"98vh",
+        height: "98vh",
         display: "flex",
         backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
         backgroundSize: "auto",
-        backgroundPosition: 'bottom',
-        backgroundRepeat: 'no-repeat',
+        backgroundPosition: "bottom",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <Paper
@@ -81,7 +86,7 @@ function Login() {
           style={{
             marginTop: lightGreen,
             backgroundColor: lightGreen,
-            width:75,
+            width: 75,
             height: 75,
           }}
         />
@@ -104,7 +109,10 @@ function Login() {
             error={formik.touched.email ? formik.errors.email : null}
           />
           <FormControl required fullWidth sx={{ mt: 3 }} variant="outlined">
-            <InputLabel required error={formik.touched.password ? formik.errors.password : null}>
+            <InputLabel
+              required
+              error={formik.touched.password ? formik.errors.password : null}
+            >
               Password
             </InputLabel>
 
@@ -141,7 +149,11 @@ function Login() {
               />
             </Grid>
             <Grid item style={{ marginTop: 1 }}>
-              <Link to="/forgot" variant="body2" style={{ textDecoration: "none" }}>
+              <Link
+                to="/forgot"
+                variant="body2"
+                style={{ textDecoration: "none" }}
+              >
                 Forgot password?
               </Link>
             </Grid>
@@ -152,7 +164,7 @@ function Login() {
             variant="contained"
             color="secondary"
             size="large"
-            style={{ marginTop:4 }}
+            style={{ marginTop: 4 }}
             onClick={formik.handleSubmit}
           >
             Login
