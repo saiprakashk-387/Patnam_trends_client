@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation ,useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -23,12 +24,14 @@ import Badge from "@mui/material/Badge";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
+import { editProfile } from "../../API/Api";
 // import ProductSearch from "../../Search/ProductSearch";
 
 const drawerWidth = 200;
 
 function Header(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { window } = props;
   const location = useLocation();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -38,6 +41,7 @@ function Header(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [translate, setTranslate] = React.useState(null);
   const [openLoginModel, setOpenLogoutModel] = React.useState(false);
+
   const open = Boolean(translate);
 
   const handleClick = (event) => {
@@ -77,7 +81,8 @@ function Header(props) {
   const handleCloseLogoutModel = () => {
     setOpenLogoutModel(false);
   };
-  const handleOpenProfile=()=>{
+  const handleOpenProfile=async()=>{
+  await dispatch(editProfile())
     navigate("/myprofile")
     handleMenuClose()
   }

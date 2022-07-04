@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -22,11 +23,13 @@ function PaperComponent(props) {
 }
 
 export default function LogoutModel(props) {
+  const navigate = useNavigate();
   const { open, handleClose } = props;
   const handleLogout = () => {
     sessionStorage.clear();
     handleClose();
     toast.success("Logout Succesfully");
+    navigate("/")
   };
   return (
     <div>
