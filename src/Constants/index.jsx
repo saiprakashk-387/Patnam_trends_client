@@ -6,5 +6,5 @@ export const updateProfileUrl="https://patnam-trends-botique.herokuapp.com/api/e
 
 
 
-// export const token = sessionStorage.getItem("userToken");
-export const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlNzZhMzMyOTM4Y2RiYjVhNDE3ZDgiLCJlbWFpbCI6InNhaUBnbWFpLmNvbSIsImlhdCI6MTY1NjkyMDEyMn0.cs-eiBdNY4DZJwwGnhxTuMFUxibIeAus1AelhRVCk3U";
+export const token = sessionStorage.getItem("userToken");
+// export const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlNzZhMzMyOTM4Y2RiYjVhNDE3ZDgiLCJlbWFpbCI6InNhaUBnbWFpLmNvbSIsImlhdCI6MTY1NjkyMDEyMn0.cs-eiBdNY4DZJwwGnhxTuMFUxibIeAus1AelhRVCk3U";

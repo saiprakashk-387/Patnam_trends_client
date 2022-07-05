@@ -115,7 +115,8 @@ function Header(props) {
       </MenuItem>
     </Menu>
   );
-
+const profile = sessionStorage.getItem("profilephoto");
+console.log("profile",profile);
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -162,11 +163,15 @@ function Header(props) {
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
         >
-          <Avatar
+          {profile? <Avatar
             alt="Remy Sharp"
-            src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
+            src={profile}
             sx={{ width: 30, height: 30 }}
-          />
+          /> :  <Avatar
+          alt="Remy Sharp"
+          src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
+          sx={{ width: 30, height: 30 }}
+        />}         
         </IconButton>
         <Typography>Profile</Typography>
       </MenuItem>

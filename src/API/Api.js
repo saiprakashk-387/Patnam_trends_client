@@ -60,7 +60,6 @@ export const editProfile =  () => {
 };
 
 export const updateProfile = (Value,id) => {
-  console.log("form",Value);
   return (dispatch) => {
     axios
       .put(baseUrl +`/edituser/${id}`,Value, {
@@ -71,8 +70,6 @@ export const updateProfile = (Value,id) => {
       })
       .then((res) => {
         dispatch(sampleAction(res));
-        dispatch(editProfile())
-        console.log("ressdhbshj",res)
         toast.success("Profile Updated");
       })
       .catch((err) => {
