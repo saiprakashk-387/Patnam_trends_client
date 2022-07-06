@@ -3,10 +3,12 @@ import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { updateProfile } from "../../API/Api";
+import Loader from "../Loader/Loader";
 
 const ProfileForm = (props) => {
   const dispatch = useDispatch();
-  const { sample } = props;
+  const { sample ,error ,isLoading} = props;
+  const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const [Value, setValue] = useState({
@@ -23,7 +25,7 @@ const ProfileForm = (props) => {
     setValue(sample.data);
   }, [props]);
   console.log("user", Value?.photoUrl);
-  sessionStorage.setItem("profilephoto",Value?.photoUrl)
+  sessionStorage.setItem("profilephoto", Value?.photoUrl);
   const handleInput = (e) => {
     e.preventDefault();
     let myData = { ...Value };
@@ -31,7 +33,7 @@ const ProfileForm = (props) => {
     setValue(myData);
   };
   const uploadImage = () => {
-   
+    setStatus(true);
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "lisuczwe");
@@ -42,8 +44,8 @@ const ProfileForm = (props) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // setValue({photoUrl:data.url})
         setUrl(data.url);
+        setStatus(false);
       })
       .catch((err) => console.log(err));
   };
@@ -138,9 +140,10 @@ const ProfileForm = (props) => {
         }}
         focused
       />
-       <TextField
-        label="Address 1"
+      <TextField
+        label="Photo Url"
         fullWidth
+        disabled
         margin="dense"
         color="secondary"
         name="address1"
@@ -152,14 +155,26 @@ const ProfileForm = (props) => {
       />
       <div>
         <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-        {image && <button onClick={uploadImage}>Upload Photo</button>}
+        {image && (
+          <span onClick={uploadImage}>
+            {url ? (
+              <Button color="success">Photo Uploaded</Button>
+            ) : (
+              <Button variant="outlined">Update Photo</Button>
+            )}
+          </span>
+        )}
       </div>
       {url && (
         <div>
           <img src={url} width={200} height={100} alt="Prfile Pic" />
         </div>
       )}
-      <Button onClick={updateProfileInfo}>Update</Button>
+      {status || isLoading? (
+        <Loader />
+      ) : (
+        <Button onClick={updateProfileInfo}>Update</Button>
+      )}
     </div>
   );
 };

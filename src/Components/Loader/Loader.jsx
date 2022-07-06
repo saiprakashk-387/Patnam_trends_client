@@ -1,24 +1,35 @@
-import { useState } from "react";
-import { css } from "@emotion/react";
-import ClipLoader from "react-spinners/ClipLoader";
+import React from "react";
+import { Spinner } from "reactstrap";
 
-// Can be a string as well. Need to ensure each key-value pair ends with ;
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
-
-const Loader=()=> {
-  let [loading, setLoading] = useState(true);
-  let [color, setColor] = useState("#ffffff");
-
+const Loader = () => {
   return (
-    <div className="sweet-loading">
-     
-      <ClipLoader color={color} loading={loading} css={override} size={150} />
+    <div>
+      <Spinner color="primary" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="secondary" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="success" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="danger" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="warning" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="info" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="light" type="grow">
+        Loading...
+      </Spinner>
+      <Spinner color="dark" type="grow">
+        Loading...
+      </Spinner>
     </div>
   );
-}
+};
 
 export default Loader;

@@ -27,8 +27,9 @@ export default function LogoutModel(props) {
   const { open, handleClose } = props;
   const handleLogout = () => {
     sessionStorage.clear();
-    handleClose();
+    sessionStorage.removeItem("userToken","name","profilephoto")   
     toast.success("Logout Succesfully");
+    handleClose();
     navigate("/")
   };
   return (
@@ -49,7 +50,6 @@ export default function LogoutModel(props) {
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          {/* <Button onClick={handleClose} >Ok</Button> */}
           <Button onClick={handleLogout}>Ok</Button>
         </DialogActions>
       </Dialog>

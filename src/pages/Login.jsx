@@ -23,16 +23,15 @@ import TextField from "@mui/material/TextField";
 import { lightGreen } from "@mui/material/colors";
 import { loginApi } from "../API/Api";
 import { sampleSelector } from "../redux/slice";
+import Loader from "../Components/Loader/Loader";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { sample } = useSelector(sampleSelector);
-  sessionStorage.setItem("userToken",sample?.data?.token)
-  sessionStorage.setItem("name",sample?.data?.user?.email)
-  // console.log("lgintoken", sample);
-  // console.log("sampolelgintoken", sample);
+  const { sample, isLoading, error } = useSelector(sampleSelector);
+  sessionStorage.setItem("userToken", sample?.data?.token);
+  sessionStorage.setItem("name", sample?.data?.user?.email);
 
   const formik = useFormik({
     initialValues: {
@@ -47,7 +46,7 @@ function Login() {
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-      await dispatch(loginApi(data ,navigate));
+      await dispatch(loginApi(data, navigate));
     },
   });
 
@@ -158,6 +157,7 @@ function Login() {
               </Link>
             </Grid>
           </Grid>
+
           <Button
             type="submit"
             fullWidth
@@ -167,7 +167,13 @@ function Login() {
             style={{ marginTop: 4 }}
             onClick={formik.handleSubmit}
           >
-            Login
+            {isLoading ? (
+              <span>
+                <Loader />
+              </span>
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
         <Grid item container style={{ marginTop: 6, marginLeft: 15 }}>
