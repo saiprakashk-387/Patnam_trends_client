@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,12 +24,13 @@ import { lightGreen } from "@mui/material/colors";
 import { loginApi } from "../API/Api";
 import { sampleSelector } from "../redux/slice";
 import Loader from "../Components/Loader/Loader";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { sample, isLoading, error } = useSelector(sampleSelector)
+  const { sample, isLoading, error } = useSelector(sampleSelector);
 
   const formik = useFormik({
     initialValues: {
@@ -154,25 +155,36 @@ function Login() {
                 Forgot password?
               </Link>
             </Grid>
-          </Grid>
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            size="large"
-            style={{ marginTop: 4 }}
-            onClick={formik.handleSubmit}
-          >
-            {isLoading ? (
-              <span>
-                <Loader />
-              </span>
-            ) : (
-              "Login"
-            )}
-          </Button>
+          </Grid>         
+          {isLoading ? (           
+            <LoadingButton
+              color="primary"
+              loading
+              fullWidth
+              size="large"
+              loadingPosition="start"
+              style={{ marginTop: 4 , color:"blue" }}
+              variant="contained"
+            >{``}</LoadingButton>
+          ) : (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              size="large"
+              style={{ marginTop: 4 }}
+              onClick={formik.handleSubmit}
+            >
+              {isLoading ? (
+                <span>
+                  <Loader />
+                </span>
+              ) : (
+                "Login"
+              )}
+            </Button>
+          )}
         </form>
         <Grid item container style={{ marginTop: 6, marginLeft: 15 }}>
           <Typography>Don&apos;t have an account? </Typography>

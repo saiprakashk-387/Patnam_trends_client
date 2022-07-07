@@ -59,7 +59,7 @@ export const editProfile =  ()  =>{
       })
       .then((res) => {
         dispatch(sampleAction(res));
-        toast.success("Profile details fetched");
+        // toast.success("Profile details fetched");
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
@@ -68,6 +68,7 @@ export const editProfile =  ()  =>{
 };
 
 export const updateProfile = (Value,id) => {
+  
   return (dispatch) => {
     dispatch(startLoading());
     axios
@@ -80,6 +81,7 @@ export const updateProfile = (Value,id) => {
       .then((res) => {
         dispatch(sampleAction(res));
         toast.success("Profile Updated");
+        
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);

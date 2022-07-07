@@ -1,6 +1,6 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import { useLocation ,useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -24,6 +24,8 @@ import Badge from "@mui/material/Badge";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
+import { editProfile } from "../../API/Api";
+import { sampleSelector } from "../../redux/slice";
 // import { editProfile } from "../../API/Api";
 // import ProductSearch from "../../Search/ProductSearch";
 
@@ -43,7 +45,13 @@ function Header(props) {
   const [openLoginModel, setOpenLogoutModel] = React.useState(false);
 
   const open = Boolean(translate);
+  const { sample, isLoading, error } = useSelector(sampleSelector);
+  useEffect(() => {
+    dispatch(editProfile());
+  }, []);
 
+  // sessionStorage.setItem("profilephoto", sample?.data?.photoUrl);
+  
   const handleClick = (event) => {
     setTranslate(event.currentTarget);
   };
@@ -221,15 +229,11 @@ const profile = sessionStorage.getItem("profilephoto");
               onClick={handleProfileMenuOpen}
               aria-haspopup="true"
             >
-              {profile? <Avatar
+               <Avatar
                 alt="Remy Sharp"
-                src={`${profile}`}
+                src={`${sample?.data?.photoUrl}`}
                 sx={{ width: 34, height: 34 }}
-              />:<Avatar
-              alt="Remy Sharp"
-              src=''
-              sx={{ width: 34, height: 34 }}
-            />}
+              />
             
             </IconButton>
           </Box>
