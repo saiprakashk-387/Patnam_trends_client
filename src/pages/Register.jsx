@@ -20,13 +20,14 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import { registerApi } from "../API/Api";
 import { sampleSelector} from '../redux/slice';
+import Loader from "../Components/Loader/Loader";
 
  function Register() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);;
 
-  const { sample } = useSelector(sampleSelector);
-  console.log("register", sample?.status);
+  const { sample, isLoading, error } = useSelector(sampleSelector);
 
   const formik = useFormik({
     initialValues: {
@@ -52,7 +53,7 @@ import { sampleSelector} from '../redux/slice';
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-      await dispatch(registerApi(data))
+      await dispatch(registerApi(data ,navigate))
     },
   });
 
@@ -226,7 +227,14 @@ import { sampleSelector} from '../redux/slice';
             style={{ marginTop: 4 }}
             onClick={formik.handleSubmit}
           >
-            Register
+            
+            {isLoading ? (
+              <span>
+                <Loader />
+              </span>
+            ) : (
+              "Register"
+            )}
           </Button>
         </form>
       

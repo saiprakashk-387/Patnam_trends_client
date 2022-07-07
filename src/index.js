@@ -9,6 +9,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme/default";
 import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.css';
 
 ReactDOM.render(
   <React.StrictMode>

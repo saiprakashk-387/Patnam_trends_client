@@ -1,5 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation ,useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -23,11 +24,14 @@ import Badge from "@mui/material/Badge";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
+// import { editProfile } from "../../API/Api";
 // import ProductSearch from "../../Search/ProductSearch";
 
 const drawerWidth = 200;
 
 function Header(props) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { window } = props;
   const location = useLocation();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -37,6 +41,7 @@ function Header(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [translate, setTranslate] = React.useState(null);
   const [openLoginModel, setOpenLogoutModel] = React.useState(false);
+
   const open = Boolean(translate);
 
   const handleClick = (event) => {
@@ -76,6 +81,10 @@ function Header(props) {
   const handleCloseLogoutModel = () => {
     setOpenLogoutModel(false);
   };
+  const handleOpenProfile=async()=>{
+    navigate("/myprofile")
+    handleMenuClose()
+  }
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -93,7 +102,7 @@ function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>
         {" "}
@@ -104,7 +113,7 @@ function Header(props) {
       </MenuItem>
     </Menu>
   );
-
+const profile = sessionStorage.getItem("profilephoto");
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -150,12 +159,12 @@ function Header(props) {
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
-        >
-          <Avatar
-            alt="Remy Sharp"
-            src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
-            sx={{ width: 30, height: 30 }}
-          />
+        >        
+        <Avatar
+          alt="Remy Sharp"
+          src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
+          sx={{ width: 30, height: 30 }}
+        />         
         </IconButton>
         <Typography>Profile</Typography>
       </MenuItem>
@@ -212,11 +221,16 @@ function Header(props) {
               onClick={handleProfileMenuOpen}
               aria-haspopup="true"
             >
-              <Avatar
+              {profile? <Avatar
                 alt="Remy Sharp"
-                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                src={`${profile}`}
                 sx={{ width: 34, height: 34 }}
-              />
+              />:<Avatar
+              alt="Remy Sharp"
+              src=''
+              sx={{ width: 34, height: 34 }}
+            />}
+            
             </IconButton>
           </Box>
 

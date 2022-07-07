@@ -1,11 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
