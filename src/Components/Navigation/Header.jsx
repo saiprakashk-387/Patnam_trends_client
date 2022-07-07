@@ -24,7 +24,7 @@ import Badge from "@mui/material/Badge";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
-import { editProfile } from "../../API/Api";
+// import { editProfile } from "../../API/Api";
 // import ProductSearch from "../../Search/ProductSearch";
 
 const drawerWidth = 200;
@@ -82,7 +82,6 @@ function Header(props) {
     setOpenLogoutModel(false);
   };
   const handleOpenProfile=async()=>{
-  await dispatch(editProfile())
     navigate("/myprofile")
     handleMenuClose()
   }
@@ -103,7 +102,6 @@ function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
       <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>
@@ -116,7 +114,6 @@ function Header(props) {
     </Menu>
   );
 const profile = sessionStorage.getItem("profilephoto");
-console.log("profile",profile);
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -162,16 +159,12 @@ console.log("profile",profile);
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
-        >
-          {profile? <Avatar
-            alt="Remy Sharp"
-            src={profile}
-            sx={{ width: 30, height: 30 }}
-          /> :  <Avatar
+        >        
+        <Avatar
           alt="Remy Sharp"
           src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
           sx={{ width: 30, height: 30 }}
-        />}         
+        />         
         </IconButton>
         <Typography>Profile</Typography>
       </MenuItem>
@@ -228,11 +221,16 @@ console.log("profile",profile);
               onClick={handleProfileMenuOpen}
               aria-haspopup="true"
             >
-              <Avatar
+              {profile? <Avatar
                 alt="Remy Sharp"
-                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                src={`${profile}`}
                 sx={{ width: 34, height: 34 }}
-              />
+              />:<Avatar
+              alt="Remy Sharp"
+              src=''
+              sx={{ width: 34, height: 34 }}
+            />}
+            
             </IconButton>
           </Box>
 

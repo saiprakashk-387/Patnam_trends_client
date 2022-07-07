@@ -20,7 +20,6 @@ export default function Dashboard() {
     setInd(i);
   };
   const handleClose = () => setOpen(false);
-
   const getInfo = () => {
     console.log("getInfo");
   };

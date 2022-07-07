@@ -1,37 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { updateProfile } from "../../API/Api";
 import Loader from "../Loader/Loader";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const ProfileForm = (props) => {
   const dispatch = useDispatch();
-  const { sample ,error ,isLoading} = props;
+
+  const { sample } = props;
   const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
-  const [Value, setValue] = useState({
-    email: "",
-    mobile: "",
-    firstname: "",
-    lastname: "",
-    address2: "",
-    address1: "",
-    photoUrl: url,
-  });
 
-  useEffect(() => {
-    setValue(sample.data);
-  }, [props]);
-  console.log("user", Value?.photoUrl);
-  sessionStorage.setItem("profilephoto", Value?.photoUrl);
-  const handleInput = (e) => {
-    e.preventDefault();
-    let myData = { ...Value };
-    myData[e.target.name] = e.target.value;
-    setValue(myData);
-  };
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      email: sample?.data?.email,
+      mobile: sample.data?.mobile,
+      firstname: sample?.data?.firstname,
+      lastname: sample?.data?.lastname,
+      address2: sample?.data?.address2,
+      address1: sample?.data?.address1,
+      photoUrl: url,
+    },
+
+    onSubmit: async (Data, reset) => {
+      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url)));
+    },
+  });
   const uploadImage = () => {
     setStatus(true);
     const data = new FormData();
@@ -50,22 +49,6 @@ const ProfileForm = (props) => {
       .catch((err) => console.log(err));
   };
 
-  const formValue = new FormData();
-  formValue.append("firstname", Value?.firstname);
-  formValue.append("lastname", Value?.lastname);
-  formValue.append("email", Value?.email);
-  formValue.append("mobile", Value?.mobile);
-  formValue.append("address1", Value?.address1);
-  formValue.append("address2", Value?.address2);
-  formValue.append("role", Value?.role);
-  formValue.append("status", Value?.status);
-  formValue.append("password", Value?.password);
-  formValue.append("photoUrl", Value?.photoUrl);
-
-  const updateProfileInfo = () => {
-    let id = Value?._id;
-    dispatch(updateProfile(Value, id));
-  };
   return (
     <div>
       <TextField
@@ -74,10 +57,8 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="firstname"
-        value={Value?.firstname}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik?.values?.firstname}
+        onChange={formik.handleChange}
         focused
       />
       <TextField
@@ -86,10 +67,8 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="lastname"
-        value={Value?.lastname}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik.values?.lastname}
+        onChange={formik.handleChange}
         focused
       />
       <TextField
@@ -98,10 +77,8 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="email"
-        value={Value?.email}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik.values?.email}
+        onChange={formik.handleChange}
         focused
       />
       <TextField
@@ -110,10 +87,8 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="mobile"
-        value={Value?.mobile}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik.values?.mobile}
+        onChange={formik.handleChange}
         focused
       />
       <TextField
@@ -122,10 +97,8 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="address1"
-        value={Value?.address1}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik.values?.address1}
+        onChange={formik.handleChange}
         focused
       />
       <TextField
@@ -134,27 +107,17 @@ const ProfileForm = (props) => {
         margin="dense"
         color="secondary"
         name="address2"
-        value={Value?.address2}
-        onChange={(e) => {
-          handleInput(e);
-        }}
-        focused
-      />
-      <TextField
-        label="Photo Url"
-        fullWidth
-        disabled
-        margin="dense"
-        color="secondary"
-        name="address1"
-        value={url}
-        onChange={(e) => {
-          handleInput(e);
-        }}
+        value={formik.values?.address2}
+        onChange={formik.handleChange}
         focused
       />
       <div>
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <input
+          type="file"
+          name="photoUrl"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
         {image && (
           <span onClick={uploadImage}>
             {url ? (
@@ -170,10 +133,11 @@ const ProfileForm = (props) => {
           <img src={url} width={200} height={100} alt="Prfile Pic" />
         </div>
       )}
-      {status || isLoading? (
+
+      {status ? (
         <Loader />
       ) : (
-        <Button onClick={updateProfileInfo}>Update</Button>
+        <Button onClick={formik.handleSubmit}>Update</Button>
       )}
     </div>
   );

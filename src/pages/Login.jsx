@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,9 +29,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { sample, isLoading, error } = useSelector(sampleSelector);
-  sessionStorage.setItem("userToken", sample?.data?.token);
-  sessionStorage.setItem("name", sample?.data?.user?.email);
+  const { sample, isLoading, error } = useSelector(sampleSelector)
 
   const formik = useFormik({
     initialValues: {

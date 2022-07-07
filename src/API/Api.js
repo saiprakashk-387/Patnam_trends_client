@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { sampleAction, startLoading } from "../redux/slice";
-
+import { hasError, sampleAction, startLoading } from "../redux/slice";
+ 
 import {
   baseUrl,
   loginUrl,
   registerUrl,
-  token,
+  ACCESS_TOKEN 
 } from "../Constants/index";
 
 export const registerApi = (data, navigate) => {
@@ -33,12 +33,16 @@ export const loginApi = (data, navigate) => {
     axios
       .post(loginUrl, data)
       .then((res) => {
+        sessionStorage.setItem("Token",res?.data?.token)
+        sessionStorage.setItem("access_token",res?.data?.token)
+
         dispatch(sampleAction(res));
         navigate("/dashboard");
         toast.success("Login Succesfully");
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
+        dispatch(hasError(err.response.data.error))
       });
   };
 };
@@ -50,12 +54,11 @@ export const editProfile =  ()  =>{
       .get(baseUrl + "/myuser", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization : ACCESS_TOKEN() ? `Bearer ${ACCESS_TOKEN()}` : undefined,
         },
       })
       .then((res) => {
         dispatch(sampleAction(res));
-
         toast.success("Profile details fetched");
       })
       .catch((err) => {
@@ -71,7 +74,7 @@ export const updateProfile = (Value,id) => {
       .put(baseUrl +`/edituser/${id}`,Value, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization : ACCESS_TOKEN() ? `Bearer ${ACCESS_TOKEN()}` : undefined,
         },
       })
       .then((res) => {

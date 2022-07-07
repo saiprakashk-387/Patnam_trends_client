@@ -8,7 +8,7 @@ import  Loader  from "../Loader/Loader";
 const MyProfile = () => {
   const dispatch = useDispatch();
   const { sample, isLoading, error } = useSelector(sampleSelector);
-
+    sessionStorage.setItem("profilephoto", sample?.data?.photoUrl);
   useEffect(() => {
     dispatch(editProfile());
   }, []);
@@ -19,7 +19,7 @@ const MyProfile = () => {
           <Loader />
         </span>
       ) : null}
-      <ProfileForm sample={sample} isLoading={isLoading} error={error}/>
+      <ProfileForm sample={sample} />
     </div>
   );
 };

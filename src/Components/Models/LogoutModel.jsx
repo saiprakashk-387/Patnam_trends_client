@@ -26,8 +26,8 @@ export default function LogoutModel(props) {
   const navigate = useNavigate();
   const { open, handleClose } = props;
   const handleLogout = () => {
-    sessionStorage.clear();
-    sessionStorage.removeItem("userToken","name","profilephoto")   
+    sessionStorage.removeItem("Token","name","profilephoto")  
+    localStorage.clear() 
     toast.success("Logout Succesfully");
     handleClose();
     navigate("/")
