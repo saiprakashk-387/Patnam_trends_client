@@ -8,10 +8,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import WorkIcon from "@mui/icons-material/Work";
 import { theme } from "../../theme/default";
+import { admin, customer } from "../Routes/RouteList";
 
 const useStyles = makeStyles({
   active: {
@@ -39,29 +37,9 @@ const useStyles = makeStyles({
   },
 });
 
-const userRoutes = [
-  {
-    id: 1,
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: <DashboardIcon />,
-  },
-  {
-    id: 2,
-    path: "/cart",
-    name: "Cart",
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    id: 3,
-    path: "/myorders",
-    name: "Orders",
-    icon: <WorkIcon />,
-  },
-];
-
 const Sidebar = (props) => {
-  const { setMobileOpen ,sample } = props;
+  const { setMobileOpen ,sample } = props;  
+ const userRole= sessionStorage.getItem("role");
   const classes = useStyles();
   const location = useLocation();
   const navigate = useNavigate();
@@ -97,7 +75,43 @@ const Sidebar = (props) => {
       </Stack>
 
       <List>
-        {userRoutes.map((item) => (
+        {userRole === "customer" ?
+                 customer.map((item) => (
+          <div key={item.id}>
+            <ListItem
+              style={{ marginTop: 14 }}
+              button
+              onClick={() => {
+                navigate(item.path);
+                setMobileOpen(false);
+              }}
+              className={
+                location.pathname === item.path ? classes.active : null
+              }
+            >
+              <ListItemIcon
+                className={
+                  location.pathname === item.path
+                    ? classes.icon
+                    : classes.activeIcon
+                }
+              >
+                {item.icon}
+              </ListItemIcon>
+              <Typography
+                variant="body1"
+                className={
+                  location.pathname === item.path
+                    ? classes.text
+                    : classes.activeIcon
+                }
+              >
+                {item.name}
+              </Typography>
+            </ListItem>
+          </div>
+        ))
+        :  admin.map((item) => (
           <div key={item.id}>
             <ListItem
               style={{ marginTop: 14 }}
