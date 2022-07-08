@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -18,14 +18,15 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { registerApi } from "../API/Api";
-import { sampleSelector} from '../redux/slice';
+import { sampleSelector } from "../redux/slice";
 import Loader from "../Components/Loader/Loader";
 
- function Register() {
+function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);;
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const { sample, isLoading, error } = useSelector(sampleSelector);
 
@@ -44,7 +45,7 @@ import Loader from "../Components/Loader/Loader";
       firstname: yup.string().required("Firstname is required"),
       lastname: yup.string().required("Lastname is required"),
       email: yup.string().email().required("Email is required"),
-      mobile: yup.string().max(10, 'Must be 10 digits'),
+      mobile: yup.string().max(10, "Must be 10 digits"),
       address1: yup.string().required("Address 1 is required"),
       address2: yup.string().required("Address 2 is required"),
       password: yup
@@ -53,7 +54,7 @@ import Loader from "../Components/Loader/Loader";
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-      await dispatch(registerApi(data ,navigate))
+      await dispatch(registerApi(data, navigate));
     },
   });
 
@@ -62,206 +63,220 @@ import Loader from "../Components/Loader/Loader";
   };
   return (
     <div>
-     <Box
-      fixed
-      sx={{
-        overflow: "hidden",
-        width: "100%",
-        display: "flex",
-        backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
-        backgroundSize: "auto",
-        backgroundPosition: "bottom",
-        backgroundRepeat: "no-repeat",
-      }}   
-    >
-      <Paper
-        elevation={4}
-        style={{
-          borderRadius: 0,
-          marginTop: 7,
+      <Box
+        fixed        
+        sx={{
+          overflow: "hidden",
+          width: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: 360,
-          margin: "100px auto",
-          padding: 20,
+          backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
+          backgroundSize: "auto",
+          backgroundPosition: "bottom",
+          backgroundRepeat: "no-repeat",
+         
         }}
       >
-        {" "}
-        <Avatar
-          src={"/Patnamtrends_2.png"}
+        <Paper
+          elevation={4}
           style={{
-            marginTop: -8,
-            backgroundColor: "lightgray",
-            width:75,
-            height: 75,
-          }}
-        />
-        <Typography component="h1" variant="h5">
-          Register
-        </Typography>
-        <form style={{ marginTop: 3, width: "100%" }}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            type="text"
-            name="firstname"
-            id="firstname"
-            label="FirstName"
-            value={formik.values.firstname}
-            onChange={formik.handleChange}
-            helperText={formik.touched.firstname ? formik.errors.firstname : null}
-            error={formik.touched.firstname ? formik.errors.firstname : null}
-          />
-           <TextField
-           sx={{ mt: 3 }}
-            variant="outlined"
-            required
-            fullWidth
-            type="text"
-            name="lastname"
-            id="lastname"
-            label="LastName"
-            value={formik.values.lastname}
-            onChange={formik.handleChange}
-            helperText={formik.touched.lastname ? formik.errors.lastname : null}
-            error={formik.touched.lastname ? formik.errors.lastname : null}
-          />
-          <TextField
-            sx={{ mt: 3 }}
-            variant="outlined"
-            required
-            fullWidth
-            type="email"
-            name="email"
-            id="email"
-            label="Email"
-            autoComplete="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            helperText={formik.touched.email ? formik.errors.email : null}
-            error={formik.touched.email ? formik.errors.email : null}
-          />
-          <TextField
-            sx={{ mt: 3 }}
-            variant="outlined"
-            required
-            fullWidth
-            type="text"
-            name="mobile"
-            id="mobile"
-            label="Mobile"
-            autoComplete="mobile"
-            value={formik.values.mobile}
-            onChange={formik.handleChange}
-            helperText={formik.touched.mobile ? formik.errors.mobile : null}
-            error={formik.touched.mobile ? formik.errors.mobile : null}
-          />
-           <TextField
-            sx={{ mt: 3 }}
-            variant="outlined"
-            fullWidth
-            type="text"
-            name="address1"
-            id="address1"
-            label="Address 1"
-            autoComplete="address1"
-            value={formik.values.address1}
-            onChange={formik.handleChange}
-            helperText={formik.touched.address1 ? formik.errors.address1 : null}
-            error={formik.touched.address1 ? formik.errors.address1 : null}
-          />
-           <TextField
-            sx={{ mt: 3 }}
-            variant="outlined"
-            fullWidth
-            type="text"
-            name="address2"
-            id="address2"
-            label="Address 2"
-            autoComplete="address2"
-            value={formik.values.address2}
-            onChange={formik.handleChange}
-            helperText={formik.touched.address2 ? formik.errors.address2 : null}
-            error={formik.touched.address2 ? formik.errors.address2 : null}
-          />
-          <FormControl required fullWidth sx={{ mt: 3 }} variant="outlined">
-            <InputLabel
-              required
-              error={formik.touched.password ? formik.errors.password : null}
-            >
-              Password
-            </InputLabel>
-
-            <OutlinedInput
-              id="password"
-              name="password"
-              type={secureTextEntry ? "password" : "text"}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password ? formik.errors.password : null}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleSecureEntry}
-                    edge="end"
-                  >
-                    {secureTextEntry ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-            <FormHelperText error>
-              {formik.touched.password ? formik.errors.password : null}
-            </FormHelperText>
-          </FormControl>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            size="large"
-            style={{ marginTop: 4 }}
-            onClick={formik.handleSubmit}
-          >
-            
-            {isLoading ? (
-              <span>
-                <Loader />
-              </span>
-            ) : (
-              "Register"
-            )}
-          </Button>
-        </form>
-      
-        <Grid
-          item
-          container
-          style={{
-            marginTop: 3,
-            marginLeft: 15,
-            color: "blue",
+            borderRadius: 0,
+            marginTop: 7,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: 360,
+            margin: "100px auto",
+            padding: 20,
           }}
         >
-          <Typography>Already have an account?</Typography>
-          <Link
-            to="/"
-            variant="body2"
+          {" "}
+          <Avatar
+            src={"/Patnamtrends_2.png"}
             style={{
-              textDecoration: "none",
-              marginLeft: 0.5,
-              color: "orange",
+              marginTop: -8,
+              backgroundColor: "lightgray",
+              width: 75,
+              height: 75,
+            }}
+          />
+          <Typography component="h1" variant="h5">
+            Register
+          </Typography>
+          <form style={{ marginTop: 3, width: "100%" }}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              type="text"
+              name="firstname"
+              id="firstname"
+              label="FirstName"
+              value={formik.values.firstname}
+              onChange={formik.handleChange}
+              helperText={
+                formik.touched.firstname ? formik.errors.firstname : null
+              }
+              error={formik.touched.firstname ? formik.errors.firstname : null}
+            />
+            <TextField
+              sx={{ mt: 3 }}
+              variant="outlined"
+              required
+              fullWidth
+              type="text"
+              name="lastname"
+              id="lastname"
+              label="LastName"
+              value={formik.values.lastname}
+              onChange={formik.handleChange}
+              helperText={
+                formik.touched.lastname ? formik.errors.lastname : null
+              }
+              error={formik.touched.lastname ? formik.errors.lastname : null}
+            />
+            <TextField
+              sx={{ mt: 3 }}
+              variant="outlined"
+              required
+              fullWidth
+              type="email"
+              name="email"
+              id="email"
+              label="Email"
+              autoComplete="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              helperText={formik.touched.email ? formik.errors.email : null}
+              error={formik.touched.email ? formik.errors.email : null}
+            />
+            <TextField
+              sx={{ mt: 3 }}
+              variant="outlined"
+              required
+              fullWidth
+              type="text"
+              name="mobile"
+              id="mobile"
+              label="Mobile"
+              autoComplete="mobile"
+              value={formik.values.mobile}
+              onChange={formik.handleChange}
+              helperText={formik.touched.mobile ? formik.errors.mobile : null}
+              error={formik.touched.mobile ? formik.errors.mobile : null}
+            />
+            <TextField
+              sx={{ mt: 3 }}
+              variant="outlined"
+              fullWidth
+              type="text"
+              name="address1"
+              id="address1"
+              label="Address 1"
+              autoComplete="address1"
+              value={formik.values.address1}
+              onChange={formik.handleChange}
+              helperText={
+                formik.touched.address1 ? formik.errors.address1 : null
+              }
+              error={formik.touched.address1 ? formik.errors.address1 : null}
+            />
+            <TextField
+              sx={{ mt: 3 }}
+              variant="outlined"
+              fullWidth
+              type="text"
+              name="address2"
+              id="address2"
+              label="Address 2"
+              autoComplete="address2"
+              value={formik.values.address2}
+              onChange={formik.handleChange}
+              helperText={
+                formik.touched.address2 ? formik.errors.address2 : null
+              }
+              error={formik.touched.address2 ? formik.errors.address2 : null}
+            />
+            <FormControl required fullWidth sx={{ mt: 3 }} variant="outlined">
+              <InputLabel
+                required
+                error={formik.touched.password ? formik.errors.password : null}
+              >
+                Password
+              </InputLabel>
+
+              <OutlinedInput
+                id="password"
+                name="password"
+                type={secureTextEntry ? "password" : "text"}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password ? formik.errors.password : null}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={toggleSecureEntry}
+                      edge="end"
+                    >
+                      {secureTextEntry ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+              <FormHelperText error>
+                {formik.touched.password ? formik.errors.password : null}
+              </FormHelperText>
+            </FormControl>
+
+            {isLoading ? (
+              <LoadingButton
+                color="primary"
+                loading
+                fullWidth
+                size="large"
+                loadingPosition="start"
+                style={{ marginTop: 4, color: "blue" }}
+                variant="contained"
+              >{``}</LoadingButton>
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                size="large"
+                style={{ marginTop: 4 }}
+                onClick={formik.handleSubmit}
+              >
+                Register
+              </Button>
+            )}
+          </form>
+          <Grid
+            item
+            container
+            style={{
+              marginTop: 3,
+              marginLeft: 15,
+              color: "blue",
             }}
           >
-            {"Sign In"}
-          </Link>
-        </Grid>
-      </Paper>
-    </Box>
+            <Typography>Already have an account?</Typography>
+            <Link
+              to="/"
+              variant="body2"
+              style={{
+                textDecoration: "none",
+                marginLeft: 0.5,
+                color: "orange",
+              }}
+            >
+              {"Sign In"}
+            </Link>
+          </Grid>
+        </Paper>
+      </Box>
     </div>
   );
 }

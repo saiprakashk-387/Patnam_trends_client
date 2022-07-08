@@ -16,22 +16,22 @@ import { theme } from "../../theme/default";
 const useStyles = makeStyles({
   active: {
     background: theme.palette.default.main,
-    color: theme.palette.success.main,
+    color: theme.palette.secondary.main,
     borderTopRightRadius: 20,
     borderEndEndRadius: 20,
     "&:hover": {
       background: theme.palette.default.main,
-      color: theme.palette.success.main,
+      color: theme.palette.secondary.main,
       borderTopRightRadius: 20,
       borderEndEndRadius: 20,
     },
   },
   text: {
-    color: theme.palette.success.main,
+    color: theme.palette.secondary.main,
     fontSize: 16,
   },
   icon: {
-    color: theme.palette.success.main,
+    color: theme.palette.secondary.main,
   },
   activeIcon: {
     color: "#fff",

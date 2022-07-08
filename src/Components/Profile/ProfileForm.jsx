@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { updateProfile } from "../../API/Api";
-import Loader from "../Loader/Loader";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import Box from '@mui/material/Box';
+import TextField from "@mui/material/TextField";
+import { editProfile, updateProfile } from "../../API/Api";
+import Loader from "../Loader/Loader";
 
 const ProfileForm = (props) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { sample } = props;
   const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
@@ -28,7 +36,11 @@ const ProfileForm = (props) => {
     },
 
     onSubmit: async (Data, reset) => {
-      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url)));
+      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url?url:sample.data.photoUrl)));
+      setTimeout(() => {
+        navigate("/dashboard");
+        dispatch(editProfile());
+      }, 500);
     },
   });
   const uploadImage = () => {
@@ -48,12 +60,24 @@ const ProfileForm = (props) => {
       })
       .catch((err) => console.log(err));
   };
-
+  const Input = styled("input")({
+    display: "none",
+  });
   return (
     <div>
+      <Box  sx={{
+        display: 'flex',
+        alignItems: 'center',
+        '& > :not(style)': { m:0 , width: '60ch' },
+      }}>
+      <Box
+      sx={{
+        alignItems: 'center',
+        '& > :not(style)': { m: 2 , width: '25ch' },
+      }}
+    >
       <TextField
         label="First Name"
-        fullWidth
         margin="dense"
         color="secondary"
         name="firstname"
@@ -63,7 +87,6 @@ const ProfileForm = (props) => {
       />
       <TextField
         label="Last Name"
-        fullWidth
         margin="dense"
         color="secondary"
         name="lastname"
@@ -73,7 +96,6 @@ const ProfileForm = (props) => {
       />
       <TextField
         label="Email"
-        fullWidth
         margin="dense"
         color="secondary"
         name="email"
@@ -83,7 +105,6 @@ const ProfileForm = (props) => {
       />
       <TextField
         label="Mobile"
-        fullWidth
         margin="dense"
         color="secondary"
         name="mobile"
@@ -93,7 +114,6 @@ const ProfileForm = (props) => {
       />
       <TextField
         label="Address 1"
-        fullWidth
         margin="dense"
         color="secondary"
         name="address1"
@@ -103,7 +123,6 @@ const ProfileForm = (props) => {
       />
       <TextField
         label="Address 2 "
-        fullWidth
         margin="dense"
         color="secondary"
         name="address2"
@@ -111,33 +130,57 @@ const ProfileForm = (props) => {
         onChange={formik.handleChange}
         focused
       />
-      <div>
-        <input
-          type="file"
-          name="photoUrl"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
+      </Box>
+      <Box    sx={{
+        alignItems: 'center',
+        '& > :not(style)': { m: 8 , width: '60ch' },
+      }}>    
+        <Stack direction="row" spacing={2}>
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <label htmlFor="icon-button-file">
+                <Input
+                  accept="image/*"
+                  id="icon-button-file"
+                  type="file"
+                  onChange={(e) => setImage(e.target.files[0])} 
+                />
+                <IconButton
+                  color="secondary"
+                  aria-label="upload picture"
+                  component="span"
+                   >
+                  <PhotoCamera sx={{ width: 50, height: 50 }} />
+                </IconButton>
+              </label>
+            }
+          >
+            {url ? (
+              <Avatar alt="Travis Howard" src={`${url}`} sx={{ width: 200, height: 200 }} />
+            ) : (
+              <Avatar alt="Travis Howard" src={`${sample?.data?.photoUrl}`} sx={{ width: 200, height: 200 }} />
+            )}
+          </Badge>
+        </Stack>        <br />
+
         {image && (
           <span onClick={uploadImage}>
             {url ? (
               <Button color="success">Photo Uploaded</Button>
             ) : (
-              <Button variant="outlined">Update Photo</Button>
+              <Button variant="outlined">Upload Photo</Button>
             )}
           </span>
         )}
-      </div>
-      {url && (
-        <div>
-          <img src={url} width={200} height={100} alt="Prfile Pic" />
-        </div>
-      )}
-
+     
+      </Box>
+      </Box>
       {status ? (
         <Loader />
       ) : (
-        <Button onClick={formik.handleSubmit}>Update</Button>
+        <Button  onClick={formik.handleSubmit} sx={{ m:2 }} variant="outlined">Update </Button>
       )}
     </div>
   );
