@@ -16,18 +16,18 @@ import { theme } from "../../theme/default";
 const useStyles = makeStyles({
   active: {
     background: theme.palette.default.main,
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
     borderTopRightRadius: 20,
     borderEndEndRadius: 20,
     "&:hover": {
       background: theme.palette.default.main,
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
       borderTopRightRadius: 20,
       borderEndEndRadius: 20,
     },
   },
   text: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
     fontSize: 16,
   },
   icon: {
@@ -61,11 +61,10 @@ const userRoutes = [
 ];
 
 const Sidebar = (props) => {
-  const { setMobileOpen } = props;
+  const { setMobileOpen ,sample } = props;
   const classes = useStyles();
   const location = useLocation();
   const navigate = useNavigate();
-
   return (
     <div>
       <Stack
@@ -86,14 +85,14 @@ const Sidebar = (props) => {
           color="white"
           textAlign="left"
         >
-          sai
+          {sample?.data?.firstname  +" "+ sample?.data?.lastname}
         </Typography>
         <Typography
           fontFamily={"Source Sans Pro"}
           color="white"
           textAlign="left"
         >
-          sai@gmail.com
+          {sample?.data?.email}
         </Typography>
       </Stack>
 

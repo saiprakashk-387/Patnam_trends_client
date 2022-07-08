@@ -6,8 +6,6 @@ import { hasError, sampleAction, startLoading } from "../redux/slice";
  
 import {
   baseUrl,
-  loginUrl,
-  registerUrl,
   ACCESS_TOKEN 
 } from "../Constants/index";
 
@@ -15,7 +13,7 @@ export const registerApi = (data, navigate) => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
-      .post(registerUrl, data)
+      .post(baseUrl+"/register", data)
       .then((res) => {
         dispatch(sampleAction(res));
         navigate("/");
@@ -31,11 +29,9 @@ export const loginApi = (data, navigate) => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
-      .post(loginUrl, data)
+      .post(baseUrl +"/login", data)
       .then((res) => {
-        sessionStorage.setItem("Token",res?.data?.token)
         sessionStorage.setItem("access_token",res?.data?.token)
-
         dispatch(sampleAction(res));
         navigate("/dashboard");
       })
@@ -65,8 +61,7 @@ export const editProfile =  ()  =>{
   };
 };
 
-export const updateProfile = (Value,id) => {
-  
+export const updateProfile = (Value,id) => {  
   return (dispatch) => {
     dispatch(startLoading());
     axios

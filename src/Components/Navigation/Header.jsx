@@ -42,15 +42,13 @@ function Header(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [translate, setTranslate] = React.useState(null);
-  const [openLoginModel, setOpenLogoutModel] = React.useState(false);
+  const [openLogoutModel, setOpenLogoutModel] = React.useState(false);
 
   const open = Boolean(translate);
   const { sample, isLoading, error } = useSelector(sampleSelector);
   useEffect(() => {
     dispatch(editProfile());
   }, []);
-
-  // sessionStorage.setItem("profilephoto", sample?.data?.photoUrl);
   
   const handleClick = (event) => {
     setTranslate(event.currentTarget);
@@ -186,7 +184,7 @@ const profile = sessionStorage.getItem("profilephoto");
         position="fixed"
         elevation={0}
         sx={{
-          bgcolor: "#1FAA59",
+          bgcolor: "blueviolet",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
@@ -207,7 +205,7 @@ const profile = sessionStorage.getItem("profilephoto");
             color={theme.palette.common.light}
             textTransform="capitalize"
           >
-            React Js
+            Patnam Trends !
           </Typography>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, marginLeft: "auto" }}>
@@ -271,7 +269,7 @@ const profile = sessionStorage.getItem("profilephoto");
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#1FAA59",
+              backgroundColor: "blueviolet",
             },
           }}
         >
@@ -284,15 +282,15 @@ const profile = sessionStorage.getItem("profilephoto");
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#1FAA59",
+              backgroundColor: "blueviolet",
             },
           }}
           open
         >
-          {<Sidebar setMobileOpen={setMobileOpen} />}
+          {<Sidebar setMobileOpen={setMobileOpen} sample={sample} />}
         </Drawer>
       </Box>
-      <LogoutModel open={openLoginModel} handleClose={handleCloseLogoutModel} />
+      <LogoutModel open={openLogoutModel} handleClose={handleCloseLogoutModel} />
     </Box>
   );
 }
