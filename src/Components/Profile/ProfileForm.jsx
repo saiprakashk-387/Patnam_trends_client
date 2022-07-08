@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Box from '@mui/material/Box';
 import TextField from "@mui/material/TextField";
-import { updateProfile } from "../../API/Api";
+import { editProfile, updateProfile } from "../../API/Api";
 import Loader from "../Loader/Loader";
 
 const ProfileForm = (props) => {
@@ -36,10 +36,10 @@ const ProfileForm = (props) => {
     },
 
     onSubmit: async (Data, reset) => {
-      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url)));
+      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url?url:sample.data.photoUrl)));
       setTimeout(() => {
-        console.log("push");
         navigate("/dashboard");
+        dispatch(editProfile());
       }, 500);
     },
   });

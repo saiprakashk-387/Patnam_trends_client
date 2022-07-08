@@ -38,7 +38,6 @@ export const loginApi = (data, navigate) => {
 
         dispatch(sampleAction(res));
         navigate("/dashboard");
-        toast.success("Login Succesfully");
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
@@ -59,7 +58,6 @@ export const editProfile =  ()  =>{
       })
       .then((res) => {
         dispatch(sampleAction(res));
-        // toast.success("Profile details fetched");
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
@@ -79,9 +77,7 @@ export const updateProfile = (Value,id) => {
         },
       })
       .then((res) => {
-        dispatch(sampleAction(res));
-        toast.success("Profile Updated");
-        
+        dispatch(sampleAction(res));        
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
