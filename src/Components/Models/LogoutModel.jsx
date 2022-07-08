@@ -28,7 +28,6 @@ export default function LogoutModel(props) {
   const handleLogout = () => {
     sessionStorage.removeItem("Token","name","profilephoto")  
     localStorage.clear() 
-    toast.success("Logout Succesfully");
     handleClose();
     navigate("/")
   };
@@ -47,7 +46,7 @@ export default function LogoutModel(props) {
           <DialogContentText>Do you want to logout.</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button  onClick={handleClose}>
             Cancel
           </Button>
           <Button onClick={handleLogout}>Ok</Button>
