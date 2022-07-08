@@ -3,17 +3,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { hasError, sampleAction, startLoading } from "../redux/slice";
- 
-import {
-  baseUrl,
-  ACCESS_TOKEN 
-} from "../Constants/index";
+
+import { baseUrl, ACCESS_TOKEN } from "../Constants/index";
 
 export const registerApi = (data, navigate) => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
-      .post(baseUrl+"/register", data)
+      .post(baseUrl + "/register", data)
       .then((res) => {
         dispatch(sampleAction(res));
         navigate("/");
@@ -29,27 +26,34 @@ export const loginApi = (data, navigate) => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
-      .post(baseUrl +"/login", data)
+      .post(baseUrl + "/login", data)
       .then((res) => {
-        sessionStorage.setItem("access_token",res?.data?.token)
+        sessionStorage.setItem("access_token", res?.data?.token);
+        sessionStorage.setItem("role", res?.data?.user?.role);
         dispatch(sampleAction(res));
-        navigate("/dashboard");
+        if (res?.data?.user?.role === "customer") {
+          navigate("/dashboard");
+        } else if (res?.data?.user?.role === "admin"){
+          navigate("/admindashboard");
+        }
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
-        dispatch(hasError(err.response.data.error))
+        dispatch(hasError(err.response.data.error));
       });
   };
 };
 
-export const editProfile =  ()  =>{ 
+export const editProfile = () => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
       .get(baseUrl + "/myuser", {
         headers: {
           "Content-Type": "application/json",
-          Authorization : ACCESS_TOKEN() ? `Bearer ${ACCESS_TOKEN()}` : undefined,
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
         },
       })
       .then((res) => {
@@ -61,18 +65,20 @@ export const editProfile =  ()  =>{
   };
 };
 
-export const updateProfile = (Value,id) => {  
+export const updateProfile = (Value, id) => {
   return (dispatch) => {
     dispatch(startLoading());
     axios
-      .put(baseUrl +`/edituser/${id}`,Value, {
+      .put(baseUrl + `/edituser/${id}`, Value, {
         headers: {
           "Content-Type": "application/json",
-          Authorization : ACCESS_TOKEN() ? `Bearer ${ACCESS_TOKEN()}` : undefined,
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
         },
       })
       .then((res) => {
-        dispatch(sampleAction(res));        
+        dispatch(sampleAction(res));
       })
       .catch((err) => {
         toast.error(`${err.response.data.error}`);
