@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import AddStockForm from "../../Admin/AddStock";
 import AdminDashboard from "../../Admin/AdminDashboard";
 import UserList from "../../Admin/UsersList";
 import Dashboard from "../../pages/Dashboard";
@@ -20,6 +21,7 @@ function MainRoute() {
           <Route path="/myprofile" element={<MyProfile />} />
           <Route path ="/admindashboard" element={<AdminDashboard/>}/>
           <Route path ="/adminuserlist" element={<UserList/>}/>
+          <Route path ="/addstock" element={<AddStockForm/>}/>
         </Route>       
       </Routes>
       
