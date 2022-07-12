@@ -109,7 +109,7 @@ function Header(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
       <MenuItem onClick={handleMenuClose}>
         {" "}
         <Button onClick={userLogout}>

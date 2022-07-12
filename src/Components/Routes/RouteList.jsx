@@ -3,6 +3,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import WorkIcon from "@mui/icons-material/Work";
 import GroupIcon from '@mui/icons-material/Group';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 
 export const customer = [
     {
@@ -37,10 +38,17 @@ export const admin =[
         name: "Users",
         icon: <GroupIcon/>,
       },
-    //   {
-    //     id: 3,
-    //     path: "/myorders",
-    //     name: "Orders",
-    //     icon: <WorkIcon />,
-    //   },
+      {
+        id: 3,
+        path: "/addstock",
+        name: "Add Stock",
+        icon: <AddBusinessIcon />,
+      },
+      // {
+      //   id: 3,
+      //   path: "/myorders",
+      //   name: "Orders",
+      //   icon: <WorkIcon />,
+      // },
+     
 ]
