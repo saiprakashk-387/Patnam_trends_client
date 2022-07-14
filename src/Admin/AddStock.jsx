@@ -16,12 +16,14 @@ const AddStockForm = () => {
   const [price, setPrice] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [file, setfile] = React.useState([]);
+  const [image, setImage] = React.useState("");
+  const [url, setUrl] = React.useState('');
 
   const handleImage = (e) => {
-    setfile(e.target.files);
-    // setfile(e.target.files[0]);
+    // setfile(e.target.files);
+    setImage(e.target.files);
   };
-
+console.log("image",image.name);
   const deleteImage = (indexval) => {
     let allUsers = [...file];
     setfile(allUsers.filter((user, index) => index !== indexval));
@@ -29,23 +31,49 @@ const AddStockForm = () => {
   const Input = styled("input")({
     display: "none",
   });
-const uploadStock =()=>{
-  console.log("upload",material,cloth,price,status,file);
-}
+  const uploadImage = () => {
+    setStatus(true);
+    const data = new FormData();
+    for (let i = 0; i < image.length; i++) {
+      data.append("file", image[i]);
+      // data.append("file", image);
+    }
+
+    data.append("upload_preset", "lisuczwe");
+    data.append("cloud_name", "dignfufky");
+    fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log("dasta", data);
+        setUrl(data.url);
+        setStatus(false);
+      })
+      .catch((err) => console.log(err));
+  };
+  console.log("url", url);
+  const uploadStock = () => {
+    console.log("upload", material, cloth, price, status, file);
+  };
   return (
     <div>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        '& > :not(style)': { m:0 , width: '100%' },
-      }} >
-       
-        <Box   sx={{
-        alignItems: 'center',
-        '& > :not(style)': { m: 2 , width: '25ch' },
-      }}>
-         <h4>Add Products</h4>
-          <FormControl >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          "& > :not(style)": { m: 0, width: "100%" },
+        }}
+      >
+        <Box
+          sx={{
+            alignItems: "center",
+            "& > :not(style)": { m: 2, width: "25ch" },
+          }}
+        >
+          <h4>Add Products</h4>
+          <FormControl>
             <InputLabel id="demo-select-small">Material Type</InputLabel>
             <Select
               value={material}
@@ -62,7 +90,7 @@ const uploadStock =()=>{
               <MenuItem value={"hs"}>HS</MenuItem>
             </Select>
           </FormControl>
-          <FormControl >
+          <FormControl>
             <InputLabel id="demo-select-small">Cloth Type</InputLabel>
             <Select
               value={cloth}
@@ -79,7 +107,7 @@ const uploadStock =()=>{
               <MenuItem value={"polyster"}>Polyster</MenuItem>
             </Select>
           </FormControl>
-          <FormControl >
+          <FormControl>
             <InputLabel id="demo-select-small">Price</InputLabel>
             <Select
               value={price}
@@ -101,7 +129,7 @@ const uploadStock =()=>{
               <MenuItem value={8500}>850</MenuItem>
             </Select>
           </FormControl>
-          <FormControl >
+          <FormControl>
             <InputLabel id="demo-select-small">Status</InputLabel>
             <Select
               value={status}
@@ -120,16 +148,16 @@ const uploadStock =()=>{
           </FormControl>
         </Box>
         <Box>
-        <label htmlFor="icon-button-file">
-            <Input 
+          <label htmlFor="icon-button-file">
+            <Input
               accept="image/*"
               id="icon-button-file"
               type="file"
               multiple
               onChange={(e) => handleImage(e)}
             />
-            Add Images
-            <IconButton 
+            {/* Add Images */}
+            <IconButton
               color="secondary"
               aria-label="upload picture"
               component="span"
@@ -137,31 +165,49 @@ const uploadStock =()=>{
               <PhotoCamera sx={{ width: 50, height: 50 }} />
             </IconButton>
           </label>
+          {
+            <span onClick={uploadImage}>
+              {url ? (
+                <Button color="success">Photo Uploaded</Button>
+              ) : image ? (
+                <Button variant="outlined">Upload Photo</Button>
+              ) : (
+                <Button variant="outlined" disabled>
+                  Upload Photo
+                </Button>
+              )}
+            </span>
+          }
         </Box>
       </Box>
       {file.length >= 1 && (
-          <div style={{width:"100%"}}>
-            {/* <p  style={{display :"block"}}>Selected Images </p> */}
-            {Object.entries(file).map((val, i) => {
-              return (
-                <p  style={{display :"inline-block"}}>
-                  <img style={{objectFit:"contain",width:"300px",height:"250px"}}
-                    alt="not fount"                    
-                    src={URL.createObjectURL(val[1])}
-                  />
-                  <Button onClick={() => deleteImage(i)} >
-                    {" "}
-                    <DeleteIcon />{" "}
-                  </Button>
-                </p>
-              );
-            })}
-          </div>
-        )}
-        {file.length >= 1 && 
-        <Button variant="outlined" color="success" onClick={uploadStock} >Upload {`(${file.length}  files)`}</Button>
-        }
-          
+        <div style={{ width: "100%" }}>         
+          {Object.entries(file).map((val, i) => {
+            return (
+              <p style={{ display: "inline-block" }}>
+                <img
+                  style={{
+                    objectFit: "contain",
+                    width: "300px",
+                    height: "250px",
+                  }}
+                  alt="not fount"
+                  src={URL.createObjectURL(val[1])}
+                />
+                <Button onClick={() => deleteImage(i)}>
+                  {" "}
+                  <DeleteIcon />{" "}
+                </Button>
+              </p>
+            );
+          })}
+        </div>
+      )}
+      {file.length >= 1 && (
+        <Button variant="outlined" color="success" onClick={uploadStock}>
+          Upload {`(${file.length}  files)`}
+        </Button>
+      )}
     </div>
   );
 };

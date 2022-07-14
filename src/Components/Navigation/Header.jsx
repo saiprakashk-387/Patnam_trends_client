@@ -184,7 +184,7 @@ const profile = sessionStorage.getItem("profilephoto");
         position="fixed"
         elevation={0}
         sx={{
-          bgcolor: "blueviolet",
+          bgcolor: "#609cbf",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
@@ -282,7 +282,7 @@ const profile = sessionStorage.getItem("profilephoto");
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "blueviolet",
+              backgroundColor: "#5e68ab",
             },
           }}
           open
