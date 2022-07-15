@@ -42,7 +42,7 @@ export const DiamondCard = () => {
       height: 100,
       width: 100,
       autoFit: false,
-      percent: 0.7,
+      percent: 0.5,
       color: [   "#E8EDF3","#5B8FF9",],
     };
     return <RingProgress {...config} />;
@@ -53,7 +53,7 @@ export const RingProgressCard = () => {
     height: 100,
     width: 100,
     autoFit: false,
-    percent: 0.7,
+    percent: 0.2,
     color: ["#5B8FF9", "#E8EDF3"],
   };
   return <RingProgress {...config} />;

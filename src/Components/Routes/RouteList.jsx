@@ -44,11 +44,11 @@ export const admin =[
         name: "Add Stock",
         icon: <AddBusinessIcon />,
       },
-      // {
-      //   id: 3,
-      //   path: "/myorders",
-      //   name: "Orders",
-      //   icon: <WorkIcon />,
-      // },
+      {
+        id: 4,
+        path: "/viewstock",
+        name: "Stock List",
+        icon: <WorkIcon />,
+      },
      
 ]
