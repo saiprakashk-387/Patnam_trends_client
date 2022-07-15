@@ -5,29 +5,22 @@ import { Pie } from '@ant-design/plots';
 const PieChart = () => {
   const data = [
     {
-      type: '分类一',
+      type: 'Cotton',
       value: 27,
     },
     {
-      type: '分类二',
+      type: 'Wool',
       value: 25,
     },
     {
-      type: '分类三',
+      type: 'Nylon',
       value: 18,
     },
     {
-      type: '分类四',
+      type: 'Polyster',
       value: 15,
     },
-    {
-      type: '分类五',
-      value: 10,
-    },
-    {
-      type: '其他',
-      value: 5,
-    },
+    
   ];
   const config = {
     appendPadding: 10,
@@ -53,4 +46,3 @@ const PieChart = () => {
   return <Pie {...config} />;
 };
 export default PieChart;
-// ReactDOM.render(<DemoPie />, document.getElementById('container'));
