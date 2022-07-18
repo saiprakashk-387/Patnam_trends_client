@@ -58,7 +58,7 @@ console.log("image",image.name);
     console.log("upload", material, cloth, price, status, file);
   };
   return (
-    <div>
+    <div style={{ marginBottom: "4rem" }}>
       <Box
         sx={{
           display: "flex",

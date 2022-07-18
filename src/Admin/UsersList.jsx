@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Button from "@mui/material/Button";
 import Strong from "@mui/material/Button";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteModel from '../Utils/DeleteModel';
@@ -27,6 +28,7 @@ const rows = [
 ];
 
 export default function UserList() {
+  const navigate = useNavigate();
   const [openDeleteModel, setOpenDeleteModel] = React.useState(false);
   const [openViewModel, setOpenViewModel] = React.useState(false);
   const handleCloseDeleteModel = () => {
@@ -41,8 +43,13 @@ export default function UserList() {
 const handleCloseViewModel = () => {
     setOpenViewModel(false);
 };
-  return (
-    <>
+
+const userEdit = (url, ids )=> {
+  let val = ids?.rows
+  navigate(url, { state: val });
+};
+  return (    
+    <div style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",marginBottom:"4rem"}}>
     <Strong>Users</Strong>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -73,7 +80,12 @@ const handleCloseViewModel = () => {
               <TableCell >{''}</TableCell>
               <TableCell >
                 <Button onClick={userView} > <VisibilityIcon/></Button>
-                <Button><EditIcon/></Button>
+                <Button  disabled
+                onClick={e => {
+                  userEdit('/adminuseredit', { rows });
+              }}
+                >
+                  <EditIcon/></Button>
                 <Button onClick={userDelete}><DeleteIcon/></Button>
               </TableCell>
             </TableRow>         
@@ -83,6 +95,7 @@ const handleCloseViewModel = () => {
     </TableContainer>
     <ViewModelSlide open={openViewModel} handleClose={handleCloseViewModel} />
     <DeleteModel open={openDeleteModel} handleClose={handleCloseDeleteModel} />
-    </>
+    </div>
+
   );
 }
