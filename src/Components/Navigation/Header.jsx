@@ -54,10 +54,6 @@ function Header(props) {
     setTranslate(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setTranslate(null);
-  };
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
