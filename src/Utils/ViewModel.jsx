@@ -5,9 +5,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import Avatar from "@mui/material/Avatar";
 
 export default function ViewModelSlide(props) {
-  const { open, handleClose, value } = props;
+  const { open, handleClose, value ,viewData  ,userViewData} = props;
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -17,9 +18,9 @@ export default function ViewModelSlide(props) {
             <TextField
               autoFocus
               margin="dense"
-              label="Product Name"
+              label="Cloth Type"
               type="text"
-              value={"heiwew"}
+              value={viewData?.cloth_type}
               variant="standard"
               disabled
             />{" "}
@@ -29,7 +30,7 @@ export default function ViewModelSlide(props) {
               margin="dense"
               label="Material Type"
               type="text"
-              value={"heiwew"}
+              value={viewData?.material_type}
               variant="standard"
               disabled
             />
@@ -38,7 +39,7 @@ export default function ViewModelSlide(props) {
               autoFocus
               margin="dense"
               label="Price"
-              value={450}
+              value={viewData?.price}
               type="number"
               variant="standard"
               disabled
@@ -48,12 +49,19 @@ export default function ViewModelSlide(props) {
               autoFocus
               margin="dense"
               label="Status"
-              value={"heiwew"}
+              value={viewData?.status}
               type="text"
               variant="standard"
               disabled
             />
             {""}
+            <div style={{ width: "100%" }}>
+          <Avatar
+            alt="Travis Howard"
+            src={`${viewData?.product_image}`}
+            sx={{ width: 200, height: 200 }}
+          />
+        </div>
           </DialogContent>
         ) : (
           <DialogContent>
@@ -62,7 +70,7 @@ export default function ViewModelSlide(props) {
               margin="dense"
               label=" Name"
               type="text"
-              value={"heiwew"}
+              value={userViewData?.firstname +""+ userViewData?.lastname}
               variant="standard"
               disabled
             />{" "}
@@ -72,7 +80,7 @@ export default function ViewModelSlide(props) {
               margin="dense"
               label="Email"
               type="text"
-              value={"heiwew"}
+              value={userViewData?.email}
               variant="standard"
               disabled
             />
@@ -81,8 +89,8 @@ export default function ViewModelSlide(props) {
               autoFocus
               margin="dense"
               label="Location"
-              value={450}
-              type="number"
+              value={userViewData?.address1 +`${""}`+userViewData?.address2}
+              type="text"
               variant="standard"
               disabled
             />
@@ -91,7 +99,7 @@ export default function ViewModelSlide(props) {
               autoFocus
               margin="dense"
               label="Number"
-              value={"heiwew"}
+              value={userViewData?.mobile}
               type="text"
               variant="standard"
               disabled
@@ -101,12 +109,29 @@ export default function ViewModelSlide(props) {
               autoFocus
               margin="dense"
               label="Status"
-              value={"heiwew"}
+              value={userViewData?.status}
               type="text"
               variant="standard"
               disabled
             />
             {""}
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Role"
+              value={userViewData?.role}
+              type="text"
+              variant="standard"
+              disabled
+            />
+            {""}
+            <div style={{ width: "100%" }}>
+          <Avatar
+            alt="Travis Howard"
+            src={`${userViewData?.photoUrl}`}
+            sx={{ width: 200, height: 200 }}
+          />
+        </div>
           </DialogContent>
         )}
 

@@ -14,34 +14,61 @@ import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Box from '@mui/material/Box';
 import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStock } from "../API/Api";
 
 const StockEdit = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
-
+  
    const [image, setImage] = useState("");
+   const [url, setUrl] = useState("");
 
   const sample = location?.state;
 
-   const formik = useFormik({
+  const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      productname: sample?.name,
-      materialtype: sample?.fat,
-      price: sample?.calories,
-      status: sample?.lastname,
-      // photoUrl: url,
+      cloth_type: sample?.cloth_type,
+      material_type: sample?.material_type,
+      price: sample?.price,
+      status: sample?.status,
+      product_image: url,
     },
 
-    onSubmit: async (Data, reset) => {
-      // console.log("data",Data);
+    onSubmit: async (Data) => {
+      dispatch(updateStock(Data ,sample?._id ,(Data.product_image = url?url:sample.product_image)))
+      setTimeout(() => {
+        navigate("/viewstock");
+      }, 500);
     },
   });
-
+  
+  const uploadImage = () => {
+    // setStatus(true);
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "lisuczwe");
+    data.append("cloud_name", "dignfufky");
+    fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setUrl(data.url);
+        // setStatus(false);
+      })
+      .catch((err) => console.log(err));
+  };
+  
   const Input = styled("input")({
     display: "none",
   });
+
   return (
-    <div>
+    <div style={{marginBottom:"4rem"}}>
       <Strong>Stock Details - Edit</Strong>
       <Box
         sx={{
@@ -60,8 +87,8 @@ const StockEdit = () => {
             label="Product Name"
             margin="dense"
             color="secondary"
-            name="productname"
-            value={formik?.values?.productname}
+            name="cloth_type"
+            value={formik?.values?.cloth_type}
             onChange={formik.handleChange}
             focused
           />
@@ -69,8 +96,8 @@ const StockEdit = () => {
             label="Material Type"
             margin="dense"
             color="secondary"
-            name="materialtype"
-            value={formik.values?.materialtype}
+            name="material_type"
+            value={formik.values?.material_type}
             onChange={formik.handleChange}
             focused
           />
@@ -120,9 +147,23 @@ const StockEdit = () => {
                   </IconButton>
                 </label>
               }
-            >              
+            > 
+             {url ? (
+              <Avatar alt="Travis Howard" src={`${url}`} sx={{ width: 200, height: 200 }} />
+            ) : (
+              <Avatar alt="Travis Howard" src={`${sample?.product_image}`} sx={{ width: 200, height: 200 }} />
+            )}             
             </Badge>
-          </Stack>         
+          </Stack>   <br />
+          {image && (
+          <span onClick={uploadImage}>
+            {url ? (
+              <Button color="success">Photo Uploaded</Button>
+            ) : (
+              <Button variant="outlined">Upload Photo</Button>
+            )}
+          </span>
+        )}      
         </Box>
       </Box>
       <Button  onClick={formik.handleSubmit} sx={{ m:2 }} variant="outlined">Update </Button>

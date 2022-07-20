@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useEffect,useState} from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,36 +14,31 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from "react-router-dom";
 import DeleteModel from '../Utils/DeleteModel';
 import ViewModelSlide from '../Utils/ViewModel';
+import { useDispatch, useSelector } from "react-redux";
+import { getStockList } from '../API/Api';
+import { productSelector } from '../redux/slice';
 
-
-
-function createData(name, calories, fat ) {
-    return { name, calories, fat  };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24),
-    createData('Ice cream sandwich', 237, 9.0, 37),
-    createData('Ice cream sandwich', 237, 9.0, 37),
-    createData('Eclair', 262, 16.0, 24),
-    createData('Eclair', 262, 16.0, 24),
-    createData('Cupcake', 305, 3.7, 67),
-    createData('Cupcake', 305, 3.7, 67),
-    createData('Gingerbread', 356, 16.0, 49),
-  
-  ];
 const StockList = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { product, isLoading, error } = useSelector(productSelector);
     const [openDeleteModel, setOpenDeleteModel] = React.useState(false);
     const [openViewModel, setOpenViewModel] = React.useState(false);
+    const [deleteId, setDeleteId] = useState()
+    const [viewData, setviewData] = useState()
 
+ useEffect(() => {
+    dispatch(getStockList());
+  }, []);
     const handleCloseDeleteModel = () => {
       setOpenDeleteModel(false);
     };
-    const stockDelete = () => {
+    const stockDelete = (val) => {
+      setDeleteId(val?._id)
       setOpenDeleteModel(true);
     };
-    const stockView = () => {
+    const stockView = (val) => {
+      setviewData(val)
         setOpenViewModel(true);
       };
  const handleCloseViewModel = () => {
@@ -59,42 +54,44 @@ const StockList = () => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell >Product Name</TableCell>
+            <TableCell >S.No</TableCell>
+            <TableCell >Cloth Type</TableCell>
             <TableCell >Material Type</TableCell>
             <TableCell >Price</TableCell>
-            <TableCell >Photo</TableCell>
             <TableCell >Status</TableCell>
+            <TableCell >Photo</TableCell>
             <TableCell >Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {product?.data?.map((row,i) => (
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
+              <TableCell >{i+1}</TableCell>
               <TableCell component="th" scope="row" s>
-                {row.name}
+                {row.cloth_type}
               </TableCell>
-              <TableCell >{row.calories}</TableCell>
-              <TableCell >{row.fat}</TableCell>
-              <TableCell >{row.carbs}</TableCell>
-              <TableCell >{row.protein}</TableCell>
+              <TableCell >{row.material_type}</TableCell>
+              <TableCell >{row.price}</TableCell>
+              <TableCell >{row.status}</TableCell>
+              <TableCell ><img src={`${row.product_image}`} alt=""  style={{width:50,height:50}}/></TableCell>
               <TableCell >
-                <Button onClick={stockView} > <VisibilityIcon/></Button>
+                <Button onClick={(e)=>{stockView(row)}} > <VisibilityIcon/></Button>
                 <Button 
                  onClick={e => {
                   stockEdit('/stockedit', { row })}}
                 ><EditIcon/></Button>
-                <Button onClick={stockDelete} ><DeleteIcon/></Button>
+                <Button onClick={(e)=>{stockDelete(row)}} ><DeleteIcon/></Button>
               </TableCell>
             </TableRow>         
           ))}
         </TableBody>    
       </Table>      
     </TableContainer>
-    <ViewModelSlide open={openViewModel} handleClose={handleCloseViewModel} value={"Stock"} />
-    <DeleteModel open={openDeleteModel} handleClose={handleCloseDeleteModel} value={"stock"} />
+    <ViewModelSlide open={openViewModel} handleClose={handleCloseViewModel} value={"Stock"} viewData={viewData}  />
+    <DeleteModel open={openDeleteModel} handleClose={handleCloseDeleteModel} value={"stock"} deleteId={deleteId} />
     </div>
   )
 }

@@ -6,24 +6,31 @@ import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { addstock } from "../API/Api";
+import { addproductSelector } from "../redux/slice";
 
 const AddStockForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate
   const [material, setMaterial] = React.useState("");
   const [cloth, setCloth] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [file, setfile] = React.useState([]);
   const [image, setImage] = React.useState("");
-  const [url, setUrl] = React.useState('');
+  const [url, setUrl] = React.useState("");
+  const { addProduct, isLoading, error } = useSelector(addproductSelector);
 
   const handleImage = (e) => {
     // setfile(e.target.files);
     setImage(e.target.files);
   };
-console.log("image",image.name);
   const deleteImage = (indexval) => {
     let allUsers = [...file];
     setfile(allUsers.filter((user, index) => index !== indexval));
@@ -38,7 +45,6 @@ console.log("image",image.name);
       data.append("file", image[i]);
       // data.append("file", image);
     }
-
     data.append("upload_preset", "lisuczwe");
     data.append("cloud_name", "dignfufky");
     fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
@@ -47,15 +53,28 @@ console.log("image",image.name);
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("dasta", data);
         setUrl(data.url);
         setStatus(false);
       })
       .catch((err) => console.log(err));
   };
-  console.log("url", url);
-  const uploadStock = () => {
-    console.log("upload", material, cloth, price, status, file);
+  const uploadStock = async () => {
+    let data = {
+      material_type: material,
+      cloth_type: cloth,
+      price: `${price}`,
+      status: status,
+      product_image: url,
+    };
+    dispatch(addstock(data));
+    if (addProduct?.status === 200) {
+      setMaterial("");
+      setCloth("");
+      setPrice("");
+      setStatus("");
+      setUrl("");
+    }
+    navigate("/viewstock")
   };
   return (
     <div style={{ marginBottom: "4rem" }}>
@@ -142,7 +161,7 @@ console.log("image",image.name);
                 <em>Select</em>
               </MenuItem>
               <MenuItem value={"available"}>Available</MenuItem>
-              <MenuItem value={"vary_soon"}>Very Soon</MenuItem>
+              <MenuItem value={"very_soon"}>Very Soon</MenuItem>
               <MenuItem value={"not_available"}>Not Available</MenuItem>
             </Select>
           </FormControl>
@@ -180,9 +199,21 @@ console.log("image",image.name);
           }
         </Box>
       </Box>
-      {file.length >= 1 && (
+      {url && (
+        <div style={{ width: "100%" }}>
+          <Avatar
+            alt="Travis Howard"
+            src={`${url}`}
+            sx={{ width: 200, height: 200 }}
+          />
+        </div>
+      )}
+      <Button variant="outlined" color="success" onClick={uploadStock}>
+        Upload Stock
+      </Button>
+      {/* {url.length >= 1 && (
         <div style={{ width: "100%" }}>         
-          {Object.entries(file).map((val, i) => {
+          {url.map((val, i) => {
             return (
               <p style={{ display: "inline-block" }}>
                 <img
@@ -192,7 +223,7 @@ console.log("image",image.name);
                     height: "250px",
                   }}
                   alt="not fount"
-                  src={URL.createObjectURL(val[1])}
+                  src={val}
                 />
                 <Button onClick={() => deleteImage(i)}>
                   {" "}
@@ -202,12 +233,12 @@ console.log("image",image.name);
             );
           })}
         </div>
-      )}
-      {file.length >= 1 && (
+      )}  */}
+      {/* {file.length >= 1 && (
         <Button variant="outlined" color="success" onClick={uploadStock}>
           Upload {`(${file.length}  files)`}
         </Button>
-      )}
+      )} */}
     </div>
   );
 };
