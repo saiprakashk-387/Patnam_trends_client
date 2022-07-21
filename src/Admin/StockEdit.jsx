@@ -166,7 +166,7 @@ const StockEdit = () => {
         )}      
         </Box>
       </Box>
-      <Button  onClick={formik.handleSubmit} sx={{ m:2 }} variant="outlined">Update </Button>
+      <Button  onClick={formik.handleSubmit} sx={{ m:4 }} variant="outlined">Update </Button>
     </div>
   );
 };

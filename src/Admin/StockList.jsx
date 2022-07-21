@@ -17,6 +17,7 @@ import ViewModelSlide from '../Utils/ViewModel';
 import { useDispatch, useSelector } from "react-redux";
 import { getStockList } from '../API/Api';
 import { productSelector } from '../redux/slice';
+import Loader from '../Components/Loader/Loader';
 
 const StockList = () => {
   const dispatch = useDispatch();
@@ -63,7 +64,8 @@ const StockList = () => {
             <TableCell >Actions</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        {isLoading ? <Loader/> :error? "Something Went Wrong" :
+          <TableBody>
           {product?.data?.map((row,i) => (
             <TableRow
               key={row.name}
@@ -76,7 +78,7 @@ const StockList = () => {
               <TableCell >{row.material_type}</TableCell>
               <TableCell >{row.price}</TableCell>
               <TableCell >{row.status}</TableCell>
-              <TableCell ><img src={`${row.product_image}`} alt=""  style={{width:50,height:50}}/></TableCell>
+              <TableCell ><img src={`${row.product_image}`} alt=""  style={{width:50,height:50,borderRadius:10}}/></TableCell>
               <TableCell >
                 <Button onClick={(e)=>{stockView(row)}} > <VisibilityIcon/></Button>
                 <Button 
@@ -87,7 +89,9 @@ const StockList = () => {
               </TableCell>
             </TableRow>         
           ))}
-        </TableBody>    
+        </TableBody>   
+        }
+       
       </Table>      
     </TableContainer>
     <ViewModelSlide open={openViewModel} handleClose={handleCloseViewModel} value={"Stock"} viewData={viewData}  />
