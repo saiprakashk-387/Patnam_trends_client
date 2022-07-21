@@ -9,6 +9,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Avatar from "@mui/material/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -175,7 +176,6 @@ const AddStockForm = () => {
               multiple
               onChange={(e) => handleImage(e)}
             />
-            {/* Add Images */}
             <IconButton
               color="secondary"
               aria-label="upload picture"
@@ -197,6 +197,7 @@ const AddStockForm = () => {
               )}
             </span>
           }
+          
         </Box>
       </Box>
       {url && (
@@ -208,9 +209,25 @@ const AddStockForm = () => {
           />
         </div>
       )}
-      <Button variant="outlined" color="success" onClick={uploadStock}>
+      {isLoading ?
+      <Button sx={{ m:4 }}>
+        <LoadingButton
+        color="primary"
+        loading
+        size="large"
+        loadingPosition="center"
+        style={{ marginTop: 4, color: "blue" ,minHeight:40,minWidth:150}}
+        variant="contained"
+      >{``}</LoadingButton>
+      </Button>
+      :       
+      <Button sx={{ m:4 }} variant="outlined" color="success" onClick={uploadStock}>
         Upload Stock
       </Button>
+    }
+      {/* <Button variant="outlined" color="success" onClick={uploadStock}>
+        Upload Stock
+      </Button> */}
       {/* {url.length >= 1 && (
         <div style={{ width: "100%" }}>         
           {url.map((val, i) => {
