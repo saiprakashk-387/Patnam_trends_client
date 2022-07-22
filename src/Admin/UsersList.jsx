@@ -11,10 +11,12 @@ import Strong from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingButton from "@mui/lab/LoadingButton";
+import Span from "@mui/material/Button";
+import InputBase from "@mui/material/InputBase";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "../Components/Loader/Loader";
 import EditIcon from "@mui/icons-material/Edit";
+import { debounce } from "lodash";
 import DeleteModel from "../Utils/DeleteModel";
 import ViewModelSlide from "../Utils/ViewModel";
 import { getUserList } from "../API/Api";
@@ -28,6 +30,7 @@ export default function UserList() {
   const [openViewModel, setOpenViewModel] = React.useState(false);
   const [userDeleteID, setuserDeleteID] = React.useState();
   const [userViewData, setuserViewData] = React.useState();
+  const [search, setSearch] = React.useState();
 
   useEffect(() => {
     dispatch(getUserList());
@@ -51,6 +54,21 @@ export default function UserList() {
     let val = ids?.rows;
     navigate(url, { state: val });
   };
+
+  const filtered = !search
+    ? users?.data
+    : users?.data.filter((value) => {
+        if (search === !null) {
+          return value;
+        } else if (
+          value.firstname.toLowerCase().includes(search.toLowerCase())
+        ) {
+          return value;
+        } else if (value.email.toLowerCase().includes(search.toLowerCase())) {
+          return value;
+        }
+      });
+
   return (
     <div
       style={{
@@ -58,11 +76,30 @@ export default function UserList() {
         marginBottom: "4rem",
       }}
     >
-      <Strong>Users</Strong>
+      <Strong>Stock List</Strong>
+      <Span>
+        <Paper
+          component="form"
+          sx={{
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            width: 200,
+          }}
+        >
+          <InputBase
+            placeholder="Search with Cloth ,Material -Type"
+            onChange={debounce((e) => {
+              setSearch(e.target.value);
+            }, 2000)}
+          />
+        </Paper>
+      </Span>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell>S.No</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Number</TableCell>
@@ -78,11 +115,12 @@ export default function UserList() {
             "Something Went Wrong"
           ) : (
             <TableBody>
-              {users?.data?.map((row) => (
+              {filtered?.map((row,i) => (
                 <TableRow
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
+                     <TableCell>{i+1}</TableCell>
                   <TableCell component="th" scope="row" s>
                     {row.firstname + "" + row.lastname}
                   </TableCell>
