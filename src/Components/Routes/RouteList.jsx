@@ -14,7 +14,7 @@ export const customer = [
       },
       {
         id: 2,
-        path: "/cart",
+        path: "/mycart",
         name: "Cart",
         icon: <ShoppingCartIcon />,
       },
