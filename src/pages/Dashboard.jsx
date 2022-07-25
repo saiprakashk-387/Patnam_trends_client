@@ -11,6 +11,7 @@ import Favorite from "@mui/icons-material/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch, useSelector } from "react-redux";
 import { productSelector } from "../redux/slice";
@@ -25,10 +26,15 @@ export default function Dashboard() {
     dispatch(getStockList());
   }, []);
 
-  const getClicked = () => {
-    console.log("getClicked");
+  const addToCart = (val) => {
+    console.log("cart", val);
   };
-
+  const addToWishList = (val) => {
+    console.log("list", val);
+  };
+  const viewProduct = (val) => {
+    console.log("view", val);
+  };
   return (
     <Box sx={{ flexGrow: 1, marginBottom: "4rem" }}>
       <Grid
@@ -53,16 +59,35 @@ export default function Dashboard() {
                       This impressive paella is a perfect party dish and a fun
                     </Typography>
                   </CardContent>
-                  <CardActions disableSpacing sx={{padding:0,marginBottom:"1rem"}}>
-                    <Span>{`INR ${val?.price}.00`}</Span>
-                    <Button variant="contained">Add to cart</Button>
+                  <CardActions
+                    disableSpacing
+                    sx={{ padding: 0, marginBottom: "1rem" }}
+                  >
+                    <Span>
+                      <CurrencyRupeeIcon />
+                      {`${val?.price}.00`}
+                    </Span>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        addToCart(val);
+                      }}
+                    >
+                      Add to cart
+                    </Button>
                     <Checkbox
-                      onClick={getClicked}
+                      onClick={() => {
+                        addToWishList(val);
+                      }}
                       {...label}
                       icon={<FavoriteBorder />}
                       checkedIcon={<Favorite />}
                     />
-                    <Button>
+                    <Button
+                      onClick={() => {
+                        viewProduct(val);
+                      }}
+                    >
                       <VisibilityIcon />
                     </Button>
                   </CardActions>
