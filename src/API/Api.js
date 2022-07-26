@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   addProductAction,
+  cartAction,
   hasError,
   productAction,
   sampleAction,
@@ -197,8 +198,8 @@ export const getUserList = () => {
 };
 export const deleteUser = (id) => {
   return (dispatch) => {
-    axios   
-      .delete(baseUrl+`/deluser/${id}`,{
+    axios
+      .delete(baseUrl + `/deluser/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: ACCESS_TOKEN()
@@ -208,6 +209,68 @@ export const deleteUser = (id) => {
       })
       .then((res) => {
         toast.success(`User Deleted`);
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+      });
+  };
+};
+
+//////cart apis.//////
+export const getCart = () => {
+  return (dispatch) => {
+    axios
+      .get(baseUrl + "/allcarts", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        dispatch(cartAction(res));
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+      });
+  };
+};
+export const addCart = (val) => {
+  return (dispatch) => {
+    axios
+      .post(baseUrl + "/addcart",val, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        console.log("res",res);
+        // dispatch(cartAction(res));
+      })
+      .catch((error) => {
+        // toast.error(`${error}`);
+        toast.error(`${error.response.data.error}`);
+      });
+  };
+};
+export const removeCartItem = (id) => {
+  return (dispatch) => {
+    axios
+      .delete(baseUrl +`/delCart/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        console.log("res",res);
+        // dispatch(cartAction(res));
       })
       .catch((err) => {
         toast.error(`${err}`);

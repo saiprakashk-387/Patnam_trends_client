@@ -15,19 +15,19 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch, useSelector } from "react-redux";
 import { productSelector } from "../redux/slice";
-import { getStockList } from "../API/Api";
+import { getStockList ,addCart} from "../API/Api";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  const { product, isLoading, error } = useSelector(productSelector);
+  const { product, isLoading, error } = useSelector(productSelector);  
 
   useEffect(() => {
     dispatch(getStockList());
   }, []);
 
-  const addToCart = (val) => {
-    console.log("cart", val);
+  const addToCart = (val) => {    
+    dispatch(addCart(val))
   };
   const addToWishList = (val) => {
     console.log("list", val);
