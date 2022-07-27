@@ -17,12 +17,12 @@ const Img = styled("img")({
   display: "block",
   maxWidth: "100%",
   maxHeight: "100%",
-}); 
+});
 
 export default function Cart() {
   const dispatch = useDispatch();
   const { cart, isLoading, error } = useSelector(cartSelector);
-  const [initialCount, setinitialCount] = useState(1)
+  const [initialCount, setinitialCount] = useState(1);
   const [productCount, setproductCount] = useState(1);
   const [ind, setInd] = useState(null);
 
@@ -30,19 +30,28 @@ export default function Cart() {
     dispatch(getCart());
   }, []);
 
-  const increment=(val)=>{
+  const prize = cart?.data?.map((r, i) => {
+    ///number(),math.floor() -to convert string to number 
+     return Number( r.price) ;
+  });
+  const result = prize?.reduce((total, currentValue) => total = total + currentValue);
+
+  const increment = (val) => {
     setproductCount(productCount + 1);
-    setInd(val?._id);    
-  }
-const decrement =(val)=>{
-   setInd(val?._id);    
-  setproductCount(productCount - 1);
-}
-const removeItem=async(id)=>{
- await dispatch(removeCartItem(id))
-//  dispatch(getCart());
-  
-}
+    setInd(val?._id);
+  };
+  const decrement = (val) => {
+   let  countValue=productCount-1
+    if (countValue<=0){
+      countValue=1
+    }
+    setInd(val?._id);
+    setproductCount(countValue - 0);
+  };
+  const removeItem = async (id) => {
+    await dispatch(removeCartItem(id));
+     dispatch(getCart());
+  };
   return (
     <Paper
       sx={{
@@ -56,88 +65,92 @@ const removeItem=async(id)=>{
       }}
     >
       <Strong> My - Cart</Strong> <br />
-      {isLoading ? (
-        "Loading "
-      ) : error ? (
-        "something Went Wrong"
-      ) : cart && cart?.data?.length >= 1 ? (
-          cart?.data?.map((val, i) => {
-            // let quantity = val?.qty
+      {isLoading
+        ? "Loading "
+        : error
+        ? "something Went Wrong"
+        : cart && cart?.data?.length >= 1
+        ? cart?.data?.map((val, i) => {
             return (
               <>
-               <Grid container>
-                <Grid sx={{ width: "35%" }}>
-                  <ButtonBase>
-                    <Img
-                      alt="complex"
-                      src={val?.product_image}
-                      sx={{ width: 300, height: 200 }}
-                    />
-                  </ButtonBase>
-                </Grid>
-                <Grid sm container sx={{ width: "50%", margin: "64px" }}>
-                  <Grid xs container direction="column">
-                    <Grid xs>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                      >
-                        Material Type :{val?.material_type}
+                <Grid container sx={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px;",padding:1,marginBottom:2}}>
+                  <Grid sx={{ width: "35%" }}>
+                    <ButtonBase>
+                      <Img
+                        alt="complex"
+                        src={val?.product_image}
+                        sx={{ width: 300, height: 200 }}
+                      />
+                    </ButtonBase>
+                  </Grid>
+                  <Grid sm container sx={{ width: "50%", margin: "64px" }}>
+                    <Grid xs container direction="column">
+                      <Grid xs>
+                        <Typography
+                          gutterBottom
+                          variant="subtitle1"
+                          component="div"
+                        >
+                          Material Type :{val?.material_type}
+                        </Typography>
+                        <Typography variant="body2" gutterBottom>
+                          Cloth Type:{val?.cloth_type}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          ID: {val?._id}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid xs container direction="column">
+                      <Grid xs key={i}>
+                        <Typography
+                          gutterBottom
+                          variant="subtitle1"
+                          component="div"
+                        >
+                          <Button
+                            onClick={() => {
+                              increment(val);
+                            }}
+                          >
+                            +
+                          </Button>
+                          {ind === val?._id ? productCount : initialCount}
+                          <Button
+                            onClick={() => {
+                              decrement(val);
+                              // setproductCount(productCount - 1);
+                            }}
+                          >
+                            -
+                          </Button>
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid>
+                      <Typography variant="subtitle1" component="div">
+                        <CurrencyRupeeIcon />
+                        {ind === val?._id
+                          ? val?.price * productCount
+                          : val?.price}
                       </Typography>
-                      <Typography variant="body2" gutterBottom>
-                       Cloth Type:{val?.cloth_type}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        ID: {val?._id}
+                      <Typography sx={{ cursor: "pointer" }} variant="body2">
+                        <Span
+                          onClick={() => {
+                            removeItem(val?._id);
+                          }}
+                        >
+                          {" "}
+                          Remove
+                        </Span>
                       </Typography>
                     </Grid>
                   </Grid>
-                  <Grid xs container direction="column">
-                    <Grid xs key ={i}>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                      >
-                        <Button
-                          onClick={() => {
-                            increment(val)
-                          }}
-                        >
-                          +
-                        </Button>
-                        {ind === val?._id?
-                        productCount :initialCount
-                        } 
-                        <Button
-                          onClick={() => {
-                            decrement(val)
-                            // setproductCount(productCount - 1);
-                          }}
-                        >
-                          -
-                        </Button>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid>
-                    <Typography variant="subtitle1" component="div">
-                      <CurrencyRupeeIcon />
-                      {ind === val?._id ?val?.price *productCount :val?.price }
-                    </Typography>
-                    <Typography sx={{ cursor: "pointer" }} variant="body2">
-                    <Span onClick={()=>{removeItem(val?._id)}}> Remove</Span> 
-                    </Typography>
-                  </Grid>
-                </Grid>
                 </Grid>
               </>
             );
           })
-      ) : (
-        "No records found"
-      )}
+        : "No records found"}
       <hr />
       <Grid sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Typography
@@ -156,7 +169,7 @@ const removeItem=async(id)=>{
           sx={{ paddingRight: "10rem" }}
         >
           <CurrencyRupeeIcon />
-          {`${19 * productCount}.00`}
+          {result}
         </Typography>
         <br />
       </Grid>

@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   addProductAction,
   cartAction,
+  cartListAction,
   hasError,
   productAction,
   sampleAction,
@@ -248,8 +249,8 @@ export const addCart = (val) => {
         },
       })
       .then((res) => {
-        console.log("res",res);
-        // dispatch(cartAction(res));
+        // console.log("res",res);
+        dispatch(cartListAction(res));
       })
       .catch((error) => {
         // toast.error(`${error}`);
