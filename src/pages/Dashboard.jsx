@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import CircularProgress from '@mui/material/CircularProgress';
+ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -14,26 +15,38 @@ import Checkbox from "@mui/material/Checkbox";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch, useSelector } from "react-redux";
-import { productSelector } from "../redux/slice";
-import { getStockList } from "../API/Api";
+import { cartListSelector, productSelector } from "../redux/slice";
+import { getStockList ,addCart} from "../API/Api";
+import ViewProduct from "./ViewProduct";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  const { product, isLoading, error } = useSelector(productSelector);
-
+  const { product, isLoading, error } = useSelector(productSelector);  
+  const { cartList ,loading } = useSelector(cartListSelector);  
+  const [view, setView] = useState(false)
+  const [productData, setProductData] = useState('')
+  const [id, setid] = useState()
+ 
   useEffect(() => {
     dispatch(getStockList());
   }, []);
 
-  const addToCart = (val) => {
-    console.log("cart", val);
+  const addToCart = (val) => {    
+    setid(val._id)
+    dispatch(addCart(val))
+    console.log("cartList",cartList?.data?.length);
   };
   const addToWishList = (val) => {
     console.log("list", val);
   };
   const viewProduct = (val) => {
-    console.log("view", val);
+    setView(true)
+    setProductData(val)
+    // console.log("view", val);
+  };
+  const handleCloseViewModel = () => {
+    setView(false);
   };
   return (
     <Box sx={{ flexGrow: 1, marginBottom: "4rem" }}>
@@ -43,7 +56,10 @@ export default function Dashboard() {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {isLoading
-          ? "Loading....."
+          ?    
+          <Grid item xs={2} sm={4} md={4}>
+          <CircularProgress />
+        </Grid>    
           : error
           ? "Something went wrong "
           : product?.data?.map((val, index) => (
@@ -67,14 +83,20 @@ export default function Dashboard() {
                       <CurrencyRupeeIcon />
                       {`${val?.price}.00`}
                     </Span>
-                    <Button
+                    {id === val._id ? <Button
+                       disabled
+                      color="success"
+                    >
+                      Added To cart
+                    </Button> :  <Button
                       variant="contained"
-                      onClick={() => {
+                       onClick={() => {
                         addToCart(val);
                       }}
-                    >
+                    > 
                       Add to cart
-                    </Button>
+                    </Button> }
+                  
                     <Checkbox
                       onClick={() => {
                         addToWishList(val);
@@ -95,6 +117,9 @@ export default function Dashboard() {
               </Grid>
             ))}
       </Grid>
+      <ViewProduct open={view}
+        handleClose={handleCloseViewModel}
+        productData={productData}/>
     </Box>
   );
 }
