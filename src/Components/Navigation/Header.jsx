@@ -1,5 +1,5 @@
-import React ,{useEffect}from "react";
-import { useLocation ,useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
@@ -21,6 +21,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
@@ -49,7 +51,7 @@ function Header(props) {
   useEffect(() => {
     dispatch(editProfile());
   }, []);
-  
+
   const handleClick = (event) => {
     setTranslate(event.currentTarget);
   };
@@ -83,10 +85,10 @@ function Header(props) {
   const handleCloseLogoutModel = () => {
     setOpenLogoutModel(false);
   };
-  const handleOpenProfile=async()=>{
-    navigate("/myprofile")
-    handleMenuClose()
-  }
+  const handleOpenProfile = async () => {
+    navigate("/myprofile");
+    handleMenuClose();
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -115,7 +117,7 @@ function Header(props) {
       </MenuItem>
     </Menu>
   );
-const profile = sessionStorage.getItem("profilephoto");
+  const profile = sessionStorage.getItem("profilephoto");
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -134,9 +136,9 @@ const profile = sessionStorage.getItem("profilephoto");
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleClick}>
-        <IconButton size="large" aria-label="show 4 new mails">
-          <TranslateIcon />
-        </IconButton>
+        <Badge badgeContent={4} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
         <Typography>Translate</Typography>
       </MenuItem>
       <MenuItem>
@@ -161,12 +163,12 @@ const profile = sessionStorage.getItem("profilephoto");
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
-        >        
-        <Avatar
-          alt="Remy Sharp"
-          src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
-          sx={{ width: 30, height: 30 }}
-        />         
+        >
+          <Avatar
+            alt="Remy Sharp"
+            src="https://bi.im-g.pl/im/e9/ad/18/z25877225Q,Elon-Musk.jpg"
+            sx={{ width: 30, height: 30 }}
+          />
         </IconButton>
         <Typography>Profile</Typography>
       </MenuItem>
@@ -205,6 +207,11 @@ const profile = sessionStorage.getItem("profilephoto");
           </Typography>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, marginLeft: "auto" }}>
+          <IconButton size="large" aria-label="show 4 new mails">
+            <Badge badgeContent={4} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+            </IconButton>
             <IconButton size="large" aria-label="show 4 new mails">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
@@ -223,12 +230,11 @@ const profile = sessionStorage.getItem("profilephoto");
               onClick={handleProfileMenuOpen}
               aria-haspopup="true"
             >
-               <Avatar
+              <Avatar
                 alt="Remy Sharp"
                 src={`${sample?.data?.photoUrl}`}
                 sx={{ width: 34, height: 34 }}
               />
-            
             </IconButton>
           </Box>
 
@@ -286,7 +292,10 @@ const profile = sessionStorage.getItem("profilephoto");
           {<Sidebar setMobileOpen={setMobileOpen} sample={sample} />}
         </Drawer>
       </Box>
-      <LogoutModel open={openLogoutModel} handleClose={handleCloseLogoutModel} />
+      <LogoutModel
+        open={openLogoutModel}
+        handleClose={handleCloseLogoutModel}
+      />
     </Box>
   );
 }

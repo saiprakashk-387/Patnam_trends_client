@@ -31,12 +31,11 @@ export default function Dashboard() {
   useEffect(() => {
     dispatch(getStockList());
   }, []);
-  console.log("cartList",cartList,loading ,cartList?.data?._id );
-  console.log("id",id);
 
   const addToCart = (val) => {    
     setid(val._id)
     dispatch(addCart(val))
+    console.log("cartList",cartList?.data?.length);
   };
   const addToWishList = (val) => {
     console.log("list", val);

@@ -30,14 +30,15 @@ export default function Cart() {
     dispatch(getCart());
   }, []);
 
+  console.log("cart",cart);
   const prize = cart?.data?.map((r, i) => {
     ///number(),math.floor() -to convert string to number 
      return Number( r.price) ;
   });
   const result = prize?.reduce((total, currentValue) => total = total + currentValue);
-
+ 
   const increment = (val) => {
-    setproductCount(productCount + 1);
+    setproductCount((prev)=>prev + 1);
     setInd(val?._id);
   };
   const decrement = (val) => {
@@ -46,7 +47,7 @@ export default function Cart() {
       countValue=1
     }
     setInd(val?._id);
-    setproductCount(countValue - 0);
+    setproductCount(((prev)=>prev - 1));
   };
   const removeItem = async (id) => {
     await dispatch(removeCartItem(id));
@@ -119,7 +120,6 @@ export default function Cart() {
                           <Button
                             onClick={() => {
                               decrement(val);
-                              // setproductCount(productCount - 1);
                             }}
                           >
                             -
