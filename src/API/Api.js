@@ -10,6 +10,7 @@ import {
   productAction,
   sampleAction,
   startLoading,
+  updateCartAction,
   usersAction,
 } from "../redux/slice";
 
@@ -240,7 +241,7 @@ export const getCart = () => {
 export const addCart = (val) => {
   return (dispatch) => {
     axios
-      .post(baseUrl + "/addcart",val, {
+      .post(baseUrl + "/addcart", val, {
         headers: {
           "Content-Type": "application/json",
           Authorization: ACCESS_TOKEN()
@@ -261,7 +262,7 @@ export const addCart = (val) => {
 export const removeCartItem = (id) => {
   return (dispatch) => {
     axios
-      .delete(baseUrl +`/delCart/${id}`, {
+      .delete(baseUrl + `/delCart/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: ACCESS_TOKEN()
@@ -270,11 +271,32 @@ export const removeCartItem = (id) => {
         },
       })
       .then((res) => {
-        console.log("res",res);
+        console.log("res", res);
         // dispatch(cartAction(res));
       })
       .catch((err) => {
         toast.error(`${err}`);
+      });
+  };
+};
+export const updateCartItems = (id,value) => {
+  return (dispatch) => {
+    axios
+      .put(baseUrl+`/updateCart/${id}`,value, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+          dispatch(updateCartAction(res));
+        console.log("res", res);
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+        // console.log("err", err);
       });
   };
 };

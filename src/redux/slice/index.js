@@ -9,6 +9,7 @@ const sampleSlice = createSlice({
     users:{},
     cart:{},
     cartList:{},
+    updateCart:{},
     isLoading: false,
     error: false,
     loading:false,
@@ -47,6 +48,10 @@ const sampleSlice = createSlice({
       state.cartList = payload;
       state.loading = false;
     },
+    updateCartAction: (state, { payload }) => {
+      state.updateCart = payload;
+      state.loading = false;
+    },
     ///action
   },
 });
@@ -60,6 +65,7 @@ export const {
  usersAction,
  cartAction,
  cartListAction,
+ updateCartAction,
 } = sampleSlice.actions;
 
 export const sampleSelector = (state) => state.sample;
@@ -68,6 +74,7 @@ export const addproductSelector = (state) => state.sample;
 export const userSelector = (state) => state.sample;
 export const cartSelector = (state) => state.sample;
 export const cartListSelector = (state) => state.sample;
+export const updateCartSelector = (state) => state.sample;
 ///assign state to selector
 
 
