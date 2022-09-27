@@ -1,7 +1,6 @@
 import React, { useEffect,useState } from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from '@mui/material/CircularProgress';
- import Grid from "@mui/material/Grid";
+  import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -15,16 +14,16 @@ import Checkbox from "@mui/material/Checkbox";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch, useSelector } from "react-redux";
-import { cartListSelector, productSelector } from "../redux/slice";
+import {   productSelector } from "../redux/slice";
 import { getStockList ,addCart} from "../API/Api";
 import ViewProduct from "./ViewProduct";
+import Loader from "../Components/Loader/Loader";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const { product, isLoading, error } = useSelector(productSelector);  
-  const { cartList ,loading } = useSelector(cartListSelector);  
-  const [view, setView] = useState(false)
+   const [view, setView] = useState(false)
   const [productData, setProductData] = useState('')
   const [id, setid] = useState()
  
@@ -35,7 +34,6 @@ export default function Dashboard() {
   const addToCart = (val) => {    
     setid(val._id)
     dispatch(addCart(val))
-    console.log("cartList",cartList?.data?.length);
   };
   const addToWishList = (val) => {
     console.log("list", val);
@@ -43,8 +41,7 @@ export default function Dashboard() {
   const viewProduct = (val) => {
     setView(true)
     setProductData(val)
-    // console.log("view", val);
-  };
+   };
   const handleCloseViewModel = () => {
     setView(false);
   };
@@ -58,14 +55,15 @@ export default function Dashboard() {
         {isLoading
           ?    
           <Grid item xs={2} sm={4} md={4}>
-          <CircularProgress />
+          <Loader/>
         </Grid>    
           : error
           ? "Something went wrong "
           : product?.data?.map((val, index) => (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <Card sx={{ maxWidth: 345 }}>
-                  <CardMedia
+              <Grid item xs={2} sm={4} md={4} key={index} >
+                <Card sx={{ maxWidth: 345 }} >
+                  <CardMedia  
+                  // className="zoom"
                     component="img"
                     height="250"
                     image={`${val.product_image}?w=248&fit=crop&auto=format`}

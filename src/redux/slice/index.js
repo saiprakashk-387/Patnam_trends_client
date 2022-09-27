@@ -3,29 +3,39 @@ import { createSlice } from "@reduxjs/toolkit";
 const sampleSlice = createSlice({
   name: "sample",
   initialState: {
-    sample: {},
-    addProduct: {},
+    ///auth//
+    createAccount:{},
+    userLogin:{},
+    ///user///
+    userEditProfile:{},
+    userUpdateProfile:{},
     product: {},
+    ///admin///
+    addProduct: {},
     users:{},
     cart:{},
     cartList:{},
     updateCart:{},
-    isLoading: false,
     error: false,
-    loading:false,
+    isLoading:true,
     ///state//
   },
   ///reducer
   reducers: {
-    startLoading: (state) => {
-      state.isLoading = true;
-    },
-    hasError: (state, action) => {
-      state.error = action.payload;
+    CreateUserAccountAction: (state, { payload }) => {
+      state.createAccount = payload;
       state.isLoading = false;
     },
-    sampleAction: (state, { payload }) => {
-      state.sample = payload;
+    UserLoginAction: (state, { payload }) => {
+      state.userLogin = payload;
+      state.isLoading = false;
+    },
+    UserEditProfileAction: (state, { payload }) => {
+      state.userEditProfile = payload;
+      state.isLoading = false;
+    },
+    UserUpdateProfileAction: (state, { payload }) => {
+      state.userUpdateProfile = payload;
       state.isLoading = false;
     },
     productAction: (state, { payload }) => {
@@ -57,9 +67,10 @@ const sampleSlice = createSlice({
 });
 
 export const {
-  sampleAction,
-  hasError,
-  startLoading,
+  CreateUserAccountAction,
+  UserLoginAction,
+  UserEditProfileAction,
+  UserUpdateProfileAction,
   productAction,
   addProductAction,
  usersAction,
@@ -68,7 +79,10 @@ export const {
  updateCartAction,
 } = sampleSlice.actions;
 
-export const sampleSelector = (state) => state.sample;
+export const createUserAccountSelector = (state) => state.sample;
+export const userLoginSelector = (state) => state.sample;
+export const userEditProfileSelector = (state) => state.sample;
+export const userUpdateProfileSelector = (state) => state.sample;
 export const productSelector = (state) => state.sample;
 export const addproductSelector = (state) => state.sample;
 export const userSelector = (state) => state.sample;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
@@ -20,15 +20,20 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { registerApi } from "../API/Api";
-import { sampleSelector } from "../redux/slice";
-import Loader from "../Components/Loader/Loader";
-
+import { createUserAccountSelector } from "../redux/slice";
+ 
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [loading, setLoading] = useState(false);
+   const { createAccount, isLoading, error } = useSelector(createUserAccountSelector);
 
-  const { sample, isLoading, error } = useSelector(sampleSelector);
+useEffect(() => {
+  if(createAccount?.response?.status !== 200){
+    setLoading(false)
+  }
+}, [createAccount])
 
   const formik = useFormik({
     initialValues: {
@@ -54,10 +59,13 @@ function Register() {
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
+      setLoading(true)
       await dispatch(registerApi(data, navigate));
+      if(createAccount?.response?.status !== 200){
+        setLoading(false)
+      }
     },
   });
-
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
@@ -69,7 +77,7 @@ function Register() {
           overflow: "hidden",
           width: "100%",
           display: "flex",
-          backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
+          // backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
           backgroundSize: "auto",
           backgroundPosition: "bottom",
           backgroundRepeat: "no-repeat",
@@ -229,7 +237,7 @@ function Register() {
               </FormHelperText>
             </FormControl>
 
-            {isLoading ? (
+            {loading ? (
               <LoadingButton
                 color="primary"
                 loading

@@ -11,6 +11,7 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart, removeCartItem, updateCartItems } from "../API/Api";
 import { cartSelector } from "../redux/slice";
+import Loader from "../Components/Loader/Loader";
 
 const Img = styled("img")({
   margin: "auto",
@@ -30,8 +31,7 @@ export default function Cart() {
     dispatch(getCart());
   }, []);
 
-  console.log("cart",cart);
-  const prize = cart?.data?.map((r, i) => {
+   const prize = cart?.data?.map((r, i) => {
     ///number(),math.floor() -to convert string to number 
      return Number( r.price) ;
   });
@@ -71,7 +71,7 @@ export default function Cart() {
     >
       <Strong> My - Cart</Strong> <br />
       {isLoading
-        ? "Loading "
+        ? (<Loader/>)
         : error
         ? "something Went Wrong"
         : cart && cart?.data?.length >= 1

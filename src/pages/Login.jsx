@@ -21,13 +21,14 @@ import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { lightGreen } from "@mui/material/colors";
 import { loginApi } from "../API/Api";
-import { sampleSelector } from "../redux/slice";
+import { userLoginSelector } from "../redux/slice";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { sample, isLoading, error } = useSelector(sampleSelector);
+   const { userLogin, isLoading, error } = useSelector(userLoginSelector);
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +43,11 @@ function Login() {
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
+      setLoading(true)
       await dispatch(loginApi(data, navigate));
+      if(userLogin?.response?.status !== 200){
+        setLoading(false)
+      }
     },
   });
 
@@ -53,11 +58,11 @@ function Login() {
     <div>
       <Box
         fixed
-        sx={{
+        sx={{         
           overflow: "hidden",
           width: "100%",
           display: "flex",
-          backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
+          // backgroundImage: `url(${"https://assets.hongkiat.com/uploads/100-absolutely-beautiful-nature-wallpapers-for-your-desktop/blue-sea-sunset.jpg"})`,
           backgroundSize: "auto",
           backgroundPosition: "bottom",
           backgroundRepeat: "no-repeat",
@@ -172,7 +177,7 @@ function Login() {
               color: "blue",
             }}
           >
-            <Typography>Already have an account?</Typography>
+            <Typography>Not Registered Yet ? </Typography>
             <Link
               to="/register"
               variant="body2"
@@ -182,7 +187,7 @@ function Login() {
                 color: lightGreen,
               }}
             >
-              {"Sign Up"}
+              {" Create an account"}
             </Link>
           </Grid>
         </Paper>

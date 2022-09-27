@@ -27,12 +27,9 @@ import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
 import { editProfile } from "../../API/Api";
-import { sampleSelector } from "../../redux/slice";
-// import { editProfile } from "../../API/Api";
-// import ProductSearch from "../../Search/ProductSearch";
+import {  userEditProfileSelector } from "../../redux/slice";
 
 const drawerWidth = 200;
-
 function Header(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,8 +44,8 @@ function Header(props) {
   const [openLogoutModel, setOpenLogoutModel] = React.useState(false);
 
   const open = Boolean(translate);
-  const { sample, isLoading, error } = useSelector(sampleSelector);
-  useEffect(() => {
+   const { userEditProfile, isLoading, error } = useSelector(userEditProfileSelector);
+   useEffect(() => {
     dispatch(editProfile());
   }, []);
 
@@ -232,7 +229,7 @@ function Header(props) {
             >
               <Avatar
                 alt="Remy Sharp"
-                src={`${sample?.data?.photoUrl}`}
+                src={`${userEditProfile?.data?.photoUrl}`}
                 sx={{ width: 34, height: 34 }}
               />
             </IconButton>
@@ -289,7 +286,7 @@ function Header(props) {
           }}
           open
         >
-          {<Sidebar setMobileOpen={setMobileOpen} sample={sample} />}
+          {<Sidebar setMobileOpen={setMobileOpen} sample={userEditProfile} />}
         </Drawer>
       </Box>
       <LogoutModel
