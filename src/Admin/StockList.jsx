@@ -88,7 +88,7 @@ const StockList = () => {
           }}
         >
           <InputBase
-            placeholder="Search with Cloth ,Material -Type"           
+            placeholder="Search with Cloth ,Material -Type"
             onChange={debounce((e) => {
               setSearch(e.target.value);
             }, 2000)}
@@ -102,7 +102,7 @@ const StockList = () => {
               <TableCell>S.No</TableCell>
               <TableCell>Cloth Type</TableCell>
               <TableCell>Material Type</TableCell>
-              <TableCell>Price</TableCell>
+              <TableCell>Price (INR)</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Photo</TableCell>
               <TableCell>Actions</TableCell>
@@ -120,12 +120,20 @@ const StockList = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>{i + 1}</TableCell>
-                  <TableCell component="th" scope="row" s>
+                  <TableCell component="th" scope="row">
                     {row.cloth_type}
                   </TableCell>
                   <TableCell>{row.material_type}</TableCell>
                   <TableCell>{row.price}</TableCell>
-                  <TableCell>{row.status}</TableCell>
+                  <TableCell>
+                    {row.status === "available" ? (
+                      <Span sx={{color:"green"}}>{"Available"}</Span>
+                    ) : row.status === "very_soon" ? (
+                      <Span sx={{color:"orange"}}>{"Very Soon"}</Span>
+                    ) : (
+                      <Span sx={{color:"rebeccapurple"}}>{"Not Available"}</Span>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <img
                       src={`${row.product_image}`}

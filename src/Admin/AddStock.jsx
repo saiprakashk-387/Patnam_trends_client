@@ -18,7 +18,7 @@ import { addproductSelector } from "../redux/slice";
 
 const AddStockForm = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate
+  const navigate = useNavigate;
   const [material, setMaterial] = React.useState("");
   const [cloth, setCloth] = React.useState("");
   const [price, setPrice] = React.useState("");
@@ -26,6 +26,7 @@ const AddStockForm = () => {
   const [file, setfile] = React.useState([]);
   const [image, setImage] = React.useState("");
   const [url, setUrl] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const { addProduct, isLoading, error } = useSelector(addproductSelector);
 
   const handleImage = (e) => {
@@ -39,13 +40,12 @@ const AddStockForm = () => {
   const Input = styled("input")({
     display: "none",
   });
-  const uploadImage = () => {
-    setStatus(true);
+   const uploadImage = () => {
+    setLoading(true);
     const data = new FormData();
     for (let i = 0; i < image.length; i++) {
       data.append("file", image[i]);
-      // data.append("file", image);
-    }
+     }
     data.append("upload_preset", "lisuczwe");
     data.append("cloud_name", "dignfufky");
     fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
@@ -55,10 +55,9 @@ const AddStockForm = () => {
       .then((resp) => resp.json())
       .then((data) => {
         setUrl(data.url);
-        setStatus(false);
+        setLoading(false);
       })
-      .catch((err) => console.log(err));
-  };
+   };
   const uploadStock = async () => {
     let data = {
       material_type: material,
@@ -67,7 +66,7 @@ const AddStockForm = () => {
       status: status,
       product_image: url,
     };
-    dispatch(addstock(data));
+    dispatch(addstock(data,navigate));
     if (addProduct?.status === 200) {
       setMaterial("");
       setCloth("");
@@ -75,7 +74,7 @@ const AddStockForm = () => {
       setStatus("");
       setUrl("");
     }
-    navigate("/viewstock")
+    
   };
   return (
     <div style={{ marginBottom: "4rem" }}>
@@ -186,18 +185,33 @@ const AddStockForm = () => {
           </label>
           {
             <span onClick={uploadImage}>
-              {url ? (
+              {loading ? (
+                <Button>
+                  <LoadingButton
+                    color="primary"
+                    loading
+                    size="large"
+                    loadingPosition="center"
+                    style={{
+                      marginTop: 4,
+                      color: "blue",
+                      minHeight: 40,
+                      minWidth: 150,
+                    }}
+                    variant="contained"
+                  >{``}</LoadingButton>
+                </Button>
+              ) : url ? (
                 <Button color="success">Photo Uploaded</Button>
               ) : image ? (
                 <Button variant="outlined">Upload Photo</Button>
               ) : (
-                <Button variant="outlined" disabled>
+                <Button variant="outlined" disabled >
                   Upload Photo
                 </Button>
               )}
             </span>
           }
-          
         </Box>
       </Box>
       {url && (
@@ -209,53 +223,37 @@ const AddStockForm = () => {
           />
         </div>
       )}
-      {isLoading ?
-      <Button sx={{ m:4 }}>
-        <LoadingButton
-        color="primary"
-        loading
-        size="large"
-        loadingPosition="center"
-        style={{ marginTop: 4, color: "blue" ,minHeight:40,minWidth:150}}
-        variant="contained"
-      >{``}</LoadingButton>
-      </Button>
-      :       
-      <Button sx={{ m:4 }} variant="outlined" color="success" onClick={uploadStock}>
-        Upload Stock
-      </Button>
-    }
-      {/* <Button variant="outlined" color="success" onClick={uploadStock}>
-        Upload Stock
-      </Button> */}
-      {/* {url.length >= 1 && (
-        <div style={{ width: "100%" }}>         
-          {url.map((val, i) => {
-            return (
-              <p style={{ display: "inline-block" }}>
-                <img
-                  style={{
-                    objectFit: "contain",
-                    width: "300px",
-                    height: "250px",
-                  }}
-                  alt="not fount"
-                  src={val}
-                />
-                <Button onClick={() => deleteImage(i)}>
-                  {" "}
-                  <DeleteIcon />{" "}
-                </Button>
-              </p>
-            );
-          })}
-        </div>
-      )}  */}
-      {/* {file.length >= 1 && (
-        <Button variant="outlined" color="success" onClick={uploadStock}>
-          Upload {`(${file.length}  files)`}
-        </Button>
-      )} */}
+
+      {material && cloth && price && status && url && (
+        <>
+          {isLoading ? (
+            <Button sx={{ m: 4 }}>
+              <LoadingButton
+                color="primary"
+                loading
+                size="large"
+                loadingPosition="center"
+                style={{
+                  marginTop: 4,
+                  color: "blue",
+                  minHeight: 40,
+                  minWidth: 150,
+                }}
+                variant="contained"
+              >{``}</LoadingButton>
+            </Button>
+          ) : (
+            <Button
+              sx={{ m: 4 }}
+              variant="outlined"
+              color="success"
+              onClick={uploadStock}
+            >
+              Upload Stock
+            </Button>
+          )}
+        </>
+      )}
     </div>
   );
 };

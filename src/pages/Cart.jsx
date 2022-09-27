@@ -9,8 +9,9 @@ import Span from "@mui/material/Button";
 import Strong from "@mui/material/Button";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart, removeCartItem } from "../API/Api";
+import { getCart, removeCartItem, updateCartItems } from "../API/Api";
 import { cartSelector } from "../redux/slice";
+import Loader from "../Components/Loader/Loader";
 
 const Img = styled("img")({
   margin: "auto",
@@ -30,8 +31,7 @@ export default function Cart() {
     dispatch(getCart());
   }, []);
 
-  console.log("cart",cart);
-  const prize = cart?.data?.map((r, i) => {
+   const prize = cart?.data?.map((r, i) => {
     ///number(),math.floor() -to convert string to number 
      return Number( r.price) ;
   });
@@ -49,6 +49,10 @@ export default function Cart() {
     setInd(val?._id);
     setproductCount(((prev)=>prev - 1));
   };
+
+  const cartUpdate=async(id,value)=>{
+   await dispatch(updateCartItems(id,value))
+  }
   const removeItem = async (id) => {
     await dispatch(removeCartItem(id));
      dispatch(getCart());
@@ -67,7 +71,7 @@ export default function Cart() {
     >
       <Strong> My - Cart</Strong> <br />
       {isLoading
-        ? "Loading "
+        ? (<Loader/>)
         : error
         ? "something Went Wrong"
         : cart && cart?.data?.length >= 1
@@ -182,7 +186,7 @@ export default function Cart() {
           paddingRight: "10rem",
         }}
       >
-        <Button variant="contained" sx={{ borderRadius: 20, width: "17%" }}>
+        <Button variant="contained" sx={{ borderRadius: 20, width: "17%" }} onClick={cartUpdate}>
           Checkout
         </Button>
       </Typography>

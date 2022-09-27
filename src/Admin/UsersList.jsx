@@ -76,7 +76,7 @@ export default function UserList() {
         marginBottom: "4rem",
       }}
     >
-      <Strong>Stock List</Strong>
+      <Strong>Users List</Strong>
       <Span>
         <Paper
           component="form"
@@ -88,7 +88,7 @@ export default function UserList() {
           }}
         >
           <InputBase
-            placeholder="Search with Cloth ,Material -Type"
+            placeholder="Search with Email"
             onChange={debounce((e) => {
               setSearch(e.target.value);
             }, 2000)}
@@ -121,17 +121,13 @@ export default function UserList() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                      <TableCell>{i+1}</TableCell>
-                  <TableCell component="th" scope="row" s>
+                  <TableCell component="th" scope="row" >
                     {row.firstname + "" + row.lastname}
                   </TableCell>
                   <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.mobile}</TableCell>
-                  {row.status === true ? (
-                    <TableCell> True</TableCell>
-                  ) : (
-                    <TableCell> False</TableCell>
-                  )}
-                  <TableCell>{row.role}</TableCell>
+                  <TableCell>{row.mobile}</TableCell>                
+                    <TableCell> {row.status === true ? <Span>{"Active" }</Span> : <Span  sx={{color:"red"}}>{"In-Active"}</Span>}</TableCell>                 
+                  <TableCell>{row.role === "admin" ?<Span sx={{color:"green"}}>{"Admin"}</Span> :<Span  sx={{color:"orange"}}>{ "Customer"}</Span>}</TableCell>
                   <TableCell>
                     <img
                       src={`${row.photoUrl}`}

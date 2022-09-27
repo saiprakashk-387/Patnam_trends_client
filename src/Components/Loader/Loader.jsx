@@ -1,35 +1,10 @@
-import React from "react";
-import { Spinner } from "reactstrap";
+import React from 'react';
+import './Loader.css'
 
 const Loader = () => {
   return (
-    <div>
-      <Spinner color="primary" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="secondary" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="success" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="danger" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="warning" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="info" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="light" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="dark" type="grow">
-        Loading...
-      </Spinner>
-    </div>
-  );
-};
+    <div class="loader"></div>
+  )
+}
 
-export default Loader;
+export default Loader
