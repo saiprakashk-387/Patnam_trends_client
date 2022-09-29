@@ -272,7 +272,7 @@ export const removeCartItem = (id) => {
       })
       .then((res) => {
         console.log("res", res);
-        // dispatch(cartAction(res));
+        dispatch(getCart());
       })
       .catch((err) => {
         toast.error(`${err}`);
