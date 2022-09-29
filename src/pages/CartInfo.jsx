@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useState} from "react";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -11,7 +11,8 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useDispatch } from "react-redux";
 import { getCart, removeCartItem, updateCartItems } from "../API/Api";
 import Loader from "../Components/Loader/Loader";
-
+import CartSummary from "./CartSummary";
+ 
 const Img = styled("img")({
   margin: "auto",
   display: "block",
@@ -23,22 +24,28 @@ const CartInfo = (props) => {
   const { item, increaseQ, decreaseQ, cartCountTotal, error, isLoading } =
     props;
   const dispatch = useDispatch();
+  const [cartView,setCartView] = useState(false);
+  const [cartItems,setCartItems] = useState()
   const cartPriceTotal =
     item && item.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const cartUpdate = async (id, value) => {
-    console.log("cartt",item);
+     setCartItems(item)
+    setCartView(true)
     // await dispatch(updateCartItems(id, value));
   };
+  const handleCartView =()=>{
+    setCartView(false)
+  }
   const removeItem = async (id) => {
     await dispatch(removeCartItem(id));
-    dispatch(getCart());
   };
 
   //   const numberFormat = val =>
   //   Number.isInteger(val) ? val : val.toFixed(2);
 
   return (
+    <>
     <Paper
       sx={{
         p: 2,
@@ -55,7 +62,7 @@ const CartInfo = (props) => {
         <Loader />
       ) : error ? (
         "something Went Wrong"
-      ) : item && item?.length >= 1 ? (
+      ) : item?.length >= 1 ? (
         item?.map((val, i) => {
           return (
             <>
@@ -117,6 +124,7 @@ const CartInfo = (props) => {
                         onClick={() => {
                           removeItem(val?._id);
                         }}
+                        sx={{color:"red"}}
                       >
                         {" "}
                         Remove
@@ -129,7 +137,7 @@ const CartInfo = (props) => {
           );
         })
       ) : (
-        "No records found"
+        <Loader />
       )}
       <hr />
       <Grid sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -171,6 +179,12 @@ const CartInfo = (props) => {
         </Button>
       </Typography>
     </Paper>
+     <CartSummary 
+     cartItems={cartItems}
+      cartView={cartView}
+      handleCartView={handleCartView}
+      />
+    </>
   );
 };
 
