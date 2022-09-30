@@ -21,13 +21,11 @@ const Img = styled("img")({
 });
 
 const CartInfo = (props) => {
-  const { item, increaseQ, decreaseQ, cartCountTotal, error, isLoading } =
+  const { item, increaseQ, decreaseQ, cartCountTotal,cartPriceTotal, error, isLoading } =
     props;
   const dispatch = useDispatch();
   const [cartView,setCartView] = useState(false);
   const [cartItems,setCartItems] = useState()
-  const cartPriceTotal =
-    item && item.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const cartUpdate = async (id, value) => {
      setCartItems(item)
@@ -183,6 +181,8 @@ const CartInfo = (props) => {
      cartItems={cartItems}
       cartView={cartView}
       handleCartView={handleCartView}
+      cartPriceTotal={cartPriceTotal}
+      cartCountTotal={cartCountTotal}
       />
     </>
   );

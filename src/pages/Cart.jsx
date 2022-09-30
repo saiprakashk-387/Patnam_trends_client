@@ -47,6 +47,8 @@ export default function Cart() {
   const cartCountTotal =
     cartt && cartt.reduce((acc, item) => acc + item.qty, 0);
 
+    const cartPriceTotal =
+    cartt && cartt.reduce((acc, item) => acc + item.price * item.qty, 0);
   return (
     <CartInfo
       item={cartt}
@@ -55,6 +57,7 @@ export default function Cart() {
       increaseQ={increaseQuantity.inCarrt}
       decreaseQ={decreaseQuantity.inCarrt}
       cartCountTotal={cartCountTotal}
+      cartPriceTotal={cartPriceTotal}
     />
   );
 }
