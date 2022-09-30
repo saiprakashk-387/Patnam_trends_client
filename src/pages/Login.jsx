@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
@@ -28,8 +28,13 @@ function Login() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-   const { userLogin, isLoading, error } = useSelector(userLoginSelector);
+  const { userLogin, isLoading, error } = useSelector(userLoginSelector);
 
+  useEffect(() => {
+    if (userLogin?.response?.status !== 200) {
+      setLoading(false);
+    }
+  }, [userLogin?.response]);
 
   const formik = useFormik({
     initialValues: {
@@ -44,11 +49,11 @@ function Login() {
         .min(6, "6 characters required"),
     }),
     onSubmit: async (data) => {
-      setLoading(true)
+      setLoading(true);
       await dispatch(loginApi(data, navigate));
-      if(userLogin?.response?.status !== 200){
-        setLoading(false)
-      }
+      // if(userLogin?.response?.status !== 200){
+      //   setLoading(false)
+      // }
     },
   });
 
@@ -59,7 +64,7 @@ function Login() {
     <div>
       <Box
         fixed
-        sx={{         
+        sx={{
           overflow: "hidden",
           width: "100%",
           display: "flex",

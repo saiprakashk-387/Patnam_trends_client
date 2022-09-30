@@ -10,7 +10,12 @@ import Slide from "@mui/material/Slide";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import ButtonBase from "@mui/material/ButtonBase";
+import { Box } from "@mui/system";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const Img = styled("img")({
   margin: "auto",
@@ -31,8 +36,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CartSummary(props) {
-  const { cartView, handleCartView, cartItems } = props;
-  console.log("cartItems", cartItems);
+  const {
+    cartView,
+    handleCartView,
+    cartItems,
+    cartCountTotal,
+    cartPriceTotal,
+  } = props;
+
+  const UserDetails = JSON.parse(sessionStorage.getItem("userdetails"));
+  console.log("UserDetails", UserDetails);
   return (
     <div>
       <Dialog
@@ -58,6 +71,7 @@ export default function CartSummary(props) {
           sx={{
             p: 2,
             margin: "auto",
+            marginBottom: "1rem",
             width: "80%",
             flexGrow: 1,
             backgroundColor: (theme) =>
@@ -66,44 +80,102 @@ export default function CartSummary(props) {
               "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
           }}
         >
-          {cartItems&&cartItems.length >= 1
-            ? cartItems.map((val, i) => {
-                return (
-                  <>
-                    <Grid container spacing={3}>
-                      <Grid item xs={6} md={4}>
-                           <Img alt="complex" src={val?.product_image} sx={{ width: 300, height: 128 }}/>
-                       </Grid>
-                      <Grid item  direction="column" spacing={2}>
-                        <Grid item xs={6} md={4}>
-                          <Grid item xs>
-                            <Typography
-                              gutterBottom
-                              variant="subtitle1"
-                              component="div"
-                            >
-                              Product Name : {val?.material_type}
-                            </Typography>
-                            <Typography variant="body2" gutterBottom>
-                              Quantity : {val?.qty}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              Price (1) : {val?.price}
-                            </Typography>
+          <Grid container spacing={2}>
+            {cartItems && cartItems.length >= 1
+              ? cartItems.map((val, i) => {
+                  return (
+                    <>
+                      <Grid item xs={8}>
+                        <Item>
+                          <Grid container spacing={3}>
+                            <Grid item xs={6} md={4}>
+                              <Img
+                                alt="complex"
+                                src={val?.product_image}
+                                sx={{ width: 300, height: 128 }}
+                              />
+                            </Grid>
+                            <Grid item direction="column" spacing={2}>
+                              <Grid item xs={6} md={4}>
+                                <Grid item xs>
+                                  <Typography
+                                    gutterBottom
+                                    variant="subtitle1"
+                                    component="div"
+                                  >
+                                    Product Name : {val?.material_type}
+                                  </Typography>
+                                  <Typography variant="body2" gutterBottom>
+                                    Quantity : {val?.qty}
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                  >
+                                    Price (1) : {val?.price}
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                              <Grid item xs={6} md={4}>
+                                <Typography variant="subtitle1" component="div">
+                                  Total : INR {val?.qty * val?.price}
+                                </Typography>
+                              </Grid>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                        <Grid item xs={6} md={4}>
-                          <Typography variant="subtitle1" component="div">
-                          Total :  INR {val?.qty * val?.price}
-                          </Typography>
-                        </Grid>
+                        </Item>
                       </Grid>
-                    </Grid>
-                    <hr />
-                  </>
-                );
-              })
-            : "loading"}
+                      <hr />
+                    </>
+                  );
+                })
+              : "loading"}
+            <Grid item xs={4} className="details">
+              <Item
+                className="paym"
+                sx={{ height: "300px", marginBottom: "50%" }}
+              >
+                <Typography varient="h1">Order Details</Typography>
+                <Box>
+                  <Typography varient="h3"> Shipping Address</Typography>
+                  <Typography varient="h3">
+                    {UserDetails?.data?.firstname + UserDetails?.data?.lastname}
+                  </Typography>
+                  <Typography varient="h3">{UserDetails?.data?.email}</Typography>
+                  <Typography varient="h3">{UserDetails?.data?.mobile}</Typography>
+                  <FormControl>                  
+                      Addreess
+                  
+                    <RadioGroup   row 
+                    >
+                      <FormControlLabel onChange={(e)=>{console.log(e.target.checked)}}
+                        value="female"
+                        control={<Radio />}
+                        label="Primary"
+                      />
+                      <FormControlLabel
+                        value="male"
+                        control={<Radio />}
+                        label="Secondary"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <Typography varient="h3">
+                    {" "}
+                    Total Qty : {cartCountTotal}
+                  </Typography>
+                  <Typography varient="h3">
+                    Total Payable Amount :$ {cartPriceTotal}
+                  </Typography>
+                </Box>
+                <Button color="primary" variant="contained">
+                  Place Order
+                </Button>
+              </Item>
+            </Grid>
+          </Grid>
         </Paper>
       </Dialog>
     </div>

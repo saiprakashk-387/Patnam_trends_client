@@ -33,7 +33,7 @@ useEffect(() => {
   if(createAccount?.response?.status !== 200){
     setLoading(false)
   }
-}, [createAccount])
+}, [createAccount?.response])
 
   const formik = useFormik({
     initialValues: {
@@ -61,9 +61,9 @@ useEffect(() => {
     onSubmit: async (data) => {
       setLoading(true)
       await dispatch(registerApi(data, navigate));
-      if(createAccount?.response?.status !== 200){
-        setLoading(false)
-      }
+      // if(createAccount?.response?.status !== 200){
+      //   setLoading(false)
+      // }
     },
   });
   const toggleSecureEntry = () => {

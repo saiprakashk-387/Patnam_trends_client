@@ -45,9 +45,13 @@ function Header(props) {
 
   const open = Boolean(translate);
    const { userEditProfile, isLoading, error } = useSelector(userEditProfileSelector);
-   useEffect(() => {
+    useEffect(() => {
     dispatch(editProfile());
   }, []);
+
+   useEffect(() => {
+    sessionStorage.setItem("userdetails", JSON.stringify(userEditProfile));
+  }, [userEditProfile]);
 
   const handleClick = (event) => {
     setTranslate(event.currentTarget);
@@ -104,8 +108,7 @@ function Header(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
-      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
-      <MenuItem onClick={handleMenuClose}>
+       <MenuItem onClick={handleMenuClose}>
         {" "}
         <Button onClick={userLogout}>
           {" "}

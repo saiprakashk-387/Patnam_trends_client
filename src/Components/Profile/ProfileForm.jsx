@@ -10,11 +10,11 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { editProfile, updateProfile } from "../../API/Api";
 import Loader from "../Loader/Loader";
-
+ 
 const ProfileForm = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ProfileForm = (props) => {
   const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
-
+ 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -36,7 +36,13 @@ const ProfileForm = (props) => {
     },
 
     onSubmit: async (Data, reset) => {
-      dispatch(updateProfile(Data, sample.data._id, (Data.photoUrl = url?url:sample.data.photoUrl)));
+      dispatch(
+        updateProfile(
+          Data,
+          sample.data._id,
+          (Data.photoUrl = url ? url : sample.data.photoUrl)
+        )
+      );
       setTimeout(() => {
         navigate("/dashboard");
         dispatch(editProfile());
@@ -63,125 +69,144 @@ const ProfileForm = (props) => {
   const Input = styled("input")({
     display: "none",
   });
+  const canclePrfileForm = () => {
+    navigate("/dashboard");
+  };
   return (
     <div>
-      <Box  sx={{
-        display: 'flex',
-        alignItems: 'center',
-        '& > :not(style)': { m:0 , width: '60ch' },
-      }}>
       <Box
-      sx={{
-        alignItems: 'center',
-        '& > :not(style)': { m: 2 , width: '25ch' },
-      }}
-    >
-      <TextField
-        label="First Name"
-        margin="dense"
-        color="secondary"
-        name="firstname"
-        value={formik?.values?.firstname}
-        onChange={formik.handleChange}
-        focused
-      />
-      <TextField
-        label="Last Name"
-        margin="dense"
-        color="secondary"
-        name="lastname"
-        value={formik.values?.lastname}
-        onChange={formik.handleChange}
-        focused
-      />
-      <TextField
-        label="Email"
-        margin="dense"
-        color="secondary"
-        name="email"
-        value={formik.values?.email}
-        onChange={formik.handleChange}
-        focused
-      />
-      <TextField
-        label="Mobile"
-        margin="dense"
-        color="secondary"
-        name="mobile"
-        value={formik.values?.mobile}
-        onChange={formik.handleChange}
-        focused
-      />
-      <TextField
-        label="Address 1"
-        margin="dense"
-        color="secondary"
-        name="address1"
-        value={formik.values?.address1}
-        onChange={formik.handleChange}
-        focused
-      />
-      <TextField
-        label="Address 2 "
-        margin="dense"
-        color="secondary"
-        name="address2"
-        value={formik.values?.address2}
-        onChange={formik.handleChange}
-        focused
-      />
-      </Box>
-      <Box    sx={{
-        alignItems: 'center',
-        '& > :not(style)': { m: 8 , width: '60ch' },
-      }}>    
-        <Stack direction="row" spacing={2}>
-          <Badge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            badgeContent={
-              <label htmlFor="icon-button-file">
-                <Input
-                  accept="image/*"
-                  id="icon-button-file"
-                  type="file"
-                  onChange={(e) => setImage(e.target.files[0])} 
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          "& > :not(style)": { m: 0, width: "60ch" },
+        }}
+      >
+        <Box
+          sx={{
+            alignItems: "center",
+            "& > :not(style)": { m: 2, width: "25ch" },
+          }}
+        >
+          <TextField
+            label="First Name"
+            margin="dense"
+            color="secondary"
+            name="firstname"
+            value={formik?.values?.firstname}
+            onChange={formik.handleChange}
+            focused
+          />
+          <TextField
+            label="Last Name"
+            margin="dense"
+            color="secondary"
+            name="lastname"
+            value={formik.values?.lastname}
+            onChange={formik.handleChange}
+            focused
+          />
+          <TextField
+            label="Email"
+            margin="dense"
+            color="secondary"
+            name="email"
+            value={formik.values?.email}
+            onChange={formik.handleChange}
+            focused
+          />
+          <TextField
+            label="Mobile"
+            margin="dense"
+            color="secondary"
+            name="mobile"
+            value={formik.values?.mobile}
+            onChange={formik.handleChange}
+            focused
+          />
+          <TextField
+            label="Address 1"
+            margin="dense"
+            color="secondary"
+            name="address1"
+            value={formik.values?.address1}
+            onChange={formik.handleChange}
+            focused
+          />
+          <TextField
+            label="Address 2 "
+            margin="dense"
+            color="secondary"
+            name="address2"
+            value={formik.values?.address2}
+            onChange={formik.handleChange}
+            focused
+          />
+        </Box>
+        <Box
+          sx={{
+            alignItems: "center",
+            "& > :not(style)": { m: 8, width: "60ch" },
+          }}
+        >
+          <Stack direction="row" spacing={2}>
+            <Badge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              badgeContent={
+                <label htmlFor="icon-button-file">
+                  <Input
+                    accept="image/*"
+                    id="icon-button-file"
+                    type="file"
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                  <IconButton
+                    color="secondary"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera sx={{ width: 50, height: 50 }} />
+                  </IconButton>
+                </label>
+              }
+            >
+              {url ? (
+                <Avatar
+                  alt="Travis Howard"
+                  src={`${url}`}
+                  sx={{ width: 200, height: 200 }}
                 />
-                <IconButton
-                  color="secondary"
-                  aria-label="upload picture"
-                  component="span"
-                   >
-                  <PhotoCamera sx={{ width: 50, height: 50 }} />
-                </IconButton>
-              </label>
-            }
-          >
-            {url ? (
-              <Avatar alt="Travis Howard" src={`${url}`} sx={{ width: 200, height: 200 }} />
-            ) : (
-              <Avatar alt="Travis Howard" src={`${sample?.data?.photoUrl}`} sx={{ width: 200, height: 200 }} />
-            )}
-          </Badge>
-        </Stack>        <br />
-
-        {image && (
-          <span onClick={uploadImage}>
-            {url ? (
-              <Button color="success">Photo Uploaded</Button>
-            ) : (
-              <Button variant="outlined">Upload Photo</Button>
-            )}
-          </span>
-        )}
-     
-      </Box>
+              ) : (
+                <Avatar
+                  alt="Travis Howard"
+                  src={`${sample?.data?.photoUrl}`}
+                  sx={{ width: 200, height: 200 }}
+                />
+              )}
+            </Badge>
+          </Stack>{" "}
+          <br />
+          {image && (
+            <span onClick={uploadImage}>
+              {url ? (
+                <Button color="success">Photo Uploaded</Button>
+              ) : (
+                <Button variant="outlined">Upload Photo</Button>
+              )}
+            </span>
+          )}
+        </Box>
       </Box>
       {status ? (
         <Loader />
       ) : (
-        <Button  onClick={formik.handleSubmit} sx={{ m:2 }} variant="outlined">Update </Button>
+        <Button onClick={formik.handleSubmit} sx={{ m: 2 }} variant="outlined">
+          Update{" "}
+        </Button>
       )}
+      <Button onClick={canclePrfileForm} sx={{ m: 2 }} variant="outlined">
+        Cancle{" "}
+      </Button>
     </div>
   );
 };
