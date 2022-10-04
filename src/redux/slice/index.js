@@ -10,6 +10,9 @@ const sampleSlice = createSlice({
     userEditProfile:{},
     userUpdateProfile:{},
     product: {},
+    placeOrder:{},
+    Orderlist:{},
+    cancelOrder:{},
     ///admin///
     addProduct: {},
     users:{},
@@ -22,6 +25,7 @@ const sampleSlice = createSlice({
   },
   ///reducer
   reducers: {
+    ///auth///
     CreateUserAccountAction: (state, { payload }) => {
       state.createAccount = payload;
       state.isLoading = false;
@@ -30,6 +34,7 @@ const sampleSlice = createSlice({
       state.userLogin = payload;
       state.isLoading = false;
     },
+    ///user///
     UserEditProfileAction: (state, { payload }) => {
       state.userEditProfile = payload;
       state.isLoading = false;
@@ -42,6 +47,19 @@ const sampleSlice = createSlice({
       state.product = payload;
       state.isLoading = false;
     },
+  PlaceOrderAction: (state, { payload }) => {
+      state.placeOrder = payload;
+      state.isLoading = false;
+    },
+  AllOrderListAction: (state, { payload }) => {
+      state.Orderlist = payload;
+      state.isLoading = false;
+    },
+  cancelOrderItemAction: (state, { payload }) => {
+      state.cancelOrder = payload;
+      state.isLoading = false;
+    },
+    ///admin///
     addProductAction: (state, { payload }) => {
       state.addProduct = payload;
       state.isLoading = false;
@@ -72,6 +90,9 @@ export const {
   UserEditProfileAction,
   UserUpdateProfileAction,
   productAction,
+  PlaceOrderAction,
+  AllOrderListAction,
+  cancelOrderItemAction,
   addProductAction,
  usersAction,
  cartAction,
@@ -84,6 +105,9 @@ export const userLoginSelector = (state) => state.sample;
 export const userEditProfileSelector = (state) => state.sample;
 export const userUpdateProfileSelector = (state) => state.sample;
 export const productSelector = (state) => state.sample;
+export const placeOrderSelector = (state) => state.sample;
+export const allOrderListSelector = (state) => state.sample;
+export const cancelOrderSelector = (state) => state.sample;
 export const addproductSelector = (state) => state.sample;
 export const userSelector = (state) => state.sample;
 export const cartSelector = (state) => state.sample;

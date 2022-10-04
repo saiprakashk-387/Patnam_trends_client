@@ -9,7 +9,7 @@ import Span from "@mui/material/Button";
 import Strong from "@mui/material/Button";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useDispatch } from "react-redux";
-import { getCart, removeCartItem, updateCartItems } from "../API/Api";
+import {  removeCartItem } from "../API/Api";
 import Loader from "../Components/Loader/Loader";
 import CartSummary from "./CartSummary";
  
@@ -30,7 +30,6 @@ const CartInfo = (props) => {
   const cartUpdate = async (id, value) => {
      setCartItems(item)
     setCartView(true)
-    // await dispatch(updateCartItems(id, value));
   };
   const handleCartView =()=>{
     setCartView(false)
@@ -60,7 +59,7 @@ const CartInfo = (props) => {
         <Loader />
       ) : error ? (
         "something Went Wrong"
-      ) : item?.length >= 1 ? (
+      ) : item?.length >= 1 && (
         item?.map((val, i) => {
           return (
             <>
@@ -134,9 +133,7 @@ const CartInfo = (props) => {
             </>
           );
         })
-      ) : (
-        <Loader />
-      )}
+      ) }
       <hr />
       <Grid sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Typography
