@@ -22,7 +22,6 @@ export default function Cart() {
     inCarrt: (i) => {
       setCart((state) =>
         state.map((item, o) => {
-          console.log(item);
           if (i === o && item.qty < 10) {
             return { ...item, qty: item.qty + 1 };
           }

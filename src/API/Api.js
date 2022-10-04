@@ -1,12 +1,14 @@
-import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   addProductAction,
+  AllOrderListAction,
+  cancelOrderItemAction,
   cartAction,
   cartListAction,
    CreateUserAccountAction,
+   PlaceOrderAction,
    productAction,
    updateCartAction,
   UserEditProfileAction,
@@ -53,7 +55,8 @@ export const loginApi = (data, navigate) => {
        });
   };
 };
-
+///user apis////
+///profile ///
 export const editProfile = () => {
   return (dispatch) => {
      axios
@@ -95,9 +98,135 @@ export const updateProfile = (Value, id) => {
       });
   };
 };
+//////cart //////
+export const getCart = () => {
+  return (dispatch) => {
+    axios
+      .get(baseUrl + "/allcarts", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        dispatch(cartAction(res));
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+      });
+  };
+};
+
+export const addCart = (val) => {
+  return (dispatch) => {
+    axios
+      .post(baseUrl + "/addcart", val, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        dispatch(cartListAction(res));
+      })
+      .catch((error) => {
+        // toast.error(`${error}`);
+        toast.error(`${error.response.data.error}`);
+      });
+  };
+};
+export const removeCartItem = (id) => {
+  return (dispatch) => {
+    axios
+      .delete(baseUrl + `/delCart/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ACCESS_TOKEN()
+            ? `Bearer ${ACCESS_TOKEN()}`
+            : undefined,
+        },
+      })
+      .then((res) => {
+        dispatch(getCart());
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+      });
+  };
+};
+///order///
+export const placeOrderApi =(requestBody)=>{
+  return (dispatch) => {
+    axios
+     .post(baseUrl + `/placeOrder`, requestBody, {
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: ACCESS_TOKEN()
+           ? `Bearer ${ACCESS_TOKEN()}`
+           : undefined,
+       },
+     })
+     .then((res) => {
+       dispatch(PlaceOrderAction(res));
+     })
+     .catch((err) => {
+       toast.error(`${err.response.data.error}`);
+       dispatch(PlaceOrderAction(err));
+     });
+ };
+}
+export const orderListApi =()=>{
+  return (dispatch) => {
+    axios
+     .get(baseUrl + `/allorders`, {
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: ACCESS_TOKEN()
+           ? `Bearer ${ACCESS_TOKEN()}`
+           : undefined,
+       },
+     })
+     .then((res) => {
+       dispatch(AllOrderListAction(res?.data[0]?.order_items[0]?.cartItems));
+     })
+     .catch((err) => {
+       toast.error(`${err.response.data.error}`);
+       dispatch(AllOrderListAction(err));
+     });
+ };
+}
+
+export const cancelOrderItemApi =(id,data)=>{
+  return (dispatch) => {
+    axios
+     .put(baseUrl + `/updateOrder/${id}`,data, {
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: ACCESS_TOKEN()
+           ? `Bearer ${ACCESS_TOKEN()}`
+           : undefined,
+       },
+     })
+     .then((res) => {
+      if(res.status === 200){
+        toast.success(`Cancellation Request Sent `);
+      }
+       dispatch(cancelOrderItemAction(res));
+     })
+     .catch((err) => {
+       toast.error(`${err.response.data.error}`);
+       dispatch(cancelOrderItemAction(err));
+     });
+ };
+}
+
 
 ///////////////////////admin api's///////////////////////
-
+///stock///
 export const addstock = (data,navigate) => {
   return (dispatch) => {
      
@@ -136,7 +265,6 @@ export const getStockList = () => {
       })
       .catch((err) => {
         toast.error(`${err}`);
-        console.log("err", err);
       });
   };
 };
@@ -178,7 +306,7 @@ export const updateStock = (Data, id) => {
       });
   };
 };
-
+////users data ///
 export const getUserList = () => {
   return (dispatch) => {
     axios
@@ -218,67 +346,7 @@ export const deleteUser = (id) => {
   };
 };
 
-//////cart apis.//////
-export const getCart = () => {
-  return (dispatch) => {
-    axios
-      .get(baseUrl + "/allcarts", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: ACCESS_TOKEN()
-            ? `Bearer ${ACCESS_TOKEN()}`
-            : undefined,
-        },
-      })
-      .then((res) => {
-        dispatch(cartAction(res));
-      })
-      .catch((err) => {
-        toast.error(`${err}`);
-      });
-  };
-};
-export const addCart = (val) => {
-  return (dispatch) => {
-    axios
-      .post(baseUrl + "/addcart", val, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: ACCESS_TOKEN()
-            ? `Bearer ${ACCESS_TOKEN()}`
-            : undefined,
-        },
-      })
-      .then((res) => {
-        // console.log("res",res);
-        dispatch(cartListAction(res));
-      })
-      .catch((error) => {
-        // toast.error(`${error}`);
-        toast.error(`${error.response.data.error}`);
-      });
-  };
-};
-export const removeCartItem = (id) => {
-  return (dispatch) => {
-    axios
-      .delete(baseUrl + `/delCart/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: ACCESS_TOKEN()
-            ? `Bearer ${ACCESS_TOKEN()}`
-            : undefined,
-        },
-      })
-      .then((res) => {
-        console.log("res", res);
-        dispatch(getCart());
-      })
-      .catch((err) => {
-        toast.error(`${err}`);
-      });
-  };
-};
+////not used//
 export const updateCartItems = (id,value) => {
   return (dispatch) => {
     axios
@@ -292,11 +360,9 @@ export const updateCartItems = (id,value) => {
       })
       .then((res) => {
           dispatch(updateCartAction(res));
-        console.log("res", res);
       })
       .catch((err) => {
         toast.error(`${err}`);
-        // console.log("err", err);
       });
   };
 };

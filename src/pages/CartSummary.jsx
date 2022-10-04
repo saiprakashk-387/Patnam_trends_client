@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -15,7 +15,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import { useDispatch, } from "react-redux";
+import { placeOrderApi } from "../API/Api";
 
 const Img = styled("img")({
   margin: "auto",
@@ -36,6 +37,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CartSummary(props) {
+  const dispatch = useDispatch();
   const {
     cartView,
     handleCartView,
@@ -43,9 +45,32 @@ export default function CartSummary(props) {
     cartCountTotal,
     cartPriceTotal,
   } = props;
-
+  const [addressInfo, setAddressInfo] = useState();
   const UserDetails = JSON.parse(sessionStorage.getItem("userdetails"));
-  console.log("UserDetails", UserDetails);
+
+  
+  const handleOrderAddress = (e) => {
+    let value = e.target.value;
+    const addres1 = {
+      name: UserDetails?.data?.firstname + UserDetails?.data?.lastname,
+      email: UserDetails?.data?.email,
+      number: UserDetails?.data?.mobile,
+      address:
+        value === "primary"
+          ? UserDetails?.data?.address1
+          : UserDetails?.data?.address2,
+    };
+    setAddressInfo(addres1);
+  };
+  const placeOrder = async()=>{
+    const requestBody ={
+      "order_items" :{cartItems},
+      "total":cartPriceTotal,
+      "userInfo":[addressInfo],
+      "status":"dipatched"
+    }
+   await dispatch(placeOrderApi(requestBody))
+  }
   return (
     <div>
       <Dialog
@@ -80,7 +105,7 @@ export default function CartSummary(props) {
               "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
           }}
         >
-          <Grid container spacing={2}>
+          <Grid container item xs={12}>
             {cartItems && cartItems.length >= 1
               ? cartItems.map((val, i) => {
                   return (
@@ -126,41 +151,73 @@ export default function CartSummary(props) {
                         </Item>
                       </Grid>
                       <hr />
+                      
                     </>
                   );
                 })
+                
               : "loading"}
             <Grid item xs={4} className="details">
-              <Item
-                className="paym"
-                sx={{ height: "300px", marginBottom: "50%" }}
-              >
+              <Item className="paym" sx={{ marginBottom: "50%" }}>
                 <Typography varient="h1">Order Details</Typography>
                 <Box>
-                  <Typography varient="h3"> Shipping Address</Typography>
-                  <Typography varient="h3">
-                    {UserDetails?.data?.firstname + UserDetails?.data?.lastname}
-                  </Typography>
-                  <Typography varient="h3">{UserDetails?.data?.email}</Typography>
-                  <Typography varient="h3">{UserDetails?.data?.mobile}</Typography>
-                  <FormControl>                  
-                      Addreess
-                  
-                    <RadioGroup   row 
-                    >
-                      <FormControlLabel onChange={(e)=>{console.log(e.target.checked)}}
-                        value="female"
-                        control={<Radio />}
-                        label="Primary"
-                      />
-                      <FormControlLabel
-                        value="male"
-                        control={<Radio />}
-                        label="Secondary"
-                      />
+                  <Typography varient="h3">Choose Shipping Address</Typography>
+                  <FormControl>
+                    <RadioGroup row>
+                      <Box>
+                        <FormControlLabel
+                          onChange={(e) => {
+                            handleOrderAddress(e);
+                          }}
+                          value={"primary"}
+                          control={<Radio />}
+                          label="Primary"
+                        />
+                      </Box>
+                      <Box>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.firstname +
+                            UserDetails?.data?.lastname}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.email}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.address1}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.mobile}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <FormControlLabel
+                          onChange={(e) => {
+                            handleOrderAddress(e);
+                          }}
+                          value={"secondary"}
+                          control={<Radio />}
+                          label="Secondary"
+                        />
+                      </Box>
+                      <Box>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.firstname +
+                            UserDetails?.data?.lastname}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.email}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.address2}
+                        </Typography>
+                        <Typography varient="h3">
+                          {UserDetails?.data?.mobile}
+                        </Typography>
+                      </Box>
                     </RadioGroup>
                   </FormControl>
                 </Box>
+                <hr />
                 <Box>
                   <Typography varient="h3">
                     {" "}
@@ -170,7 +227,7 @@ export default function CartSummary(props) {
                     Total Payable Amount :$ {cartPriceTotal}
                   </Typography>
                 </Box>
-                <Button color="primary" variant="contained">
+                <Button color="primary" variant="contained" onClick={placeOrder}>
                   Place Order
                 </Button>
               </Item>
