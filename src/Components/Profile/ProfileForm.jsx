@@ -14,7 +14,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { editProfile, updateProfile } from "../../API/Api";
 import Loader from "../Loader/Loader";
- 
+
 const ProfileForm = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ProfileForm = (props) => {
   const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
- 
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -44,7 +44,11 @@ const ProfileForm = (props) => {
         )
       );
       setTimeout(() => {
-        navigate("/dashboard");
+        if (sample?.data?.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/dashboard");
+        }
         dispatch(editProfile());
       }, 500);
     },
@@ -70,7 +74,11 @@ const ProfileForm = (props) => {
     display: "none",
   });
   const canclePrfileForm = () => {
-    navigate("/dashboard");
+    if (sample?.data?.role === "admin") {
+      navigate("/admindashboard");
+    } else {
+      navigate("/dashboard");
+    }
   };
   return (
     <div>
@@ -205,7 +213,7 @@ const ProfileForm = (props) => {
         </Button>
       )}
       <Button onClick={canclePrfileForm} sx={{ m: 2 }} variant="outlined">
-        Cancle{" "}
+        Cancel{" "}
       </Button>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useCallback } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,11 +16,11 @@ import InputBase from "@mui/material/InputBase";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "../Components/Loader/Loader";
 import EditIcon from "@mui/icons-material/Edit";
-import { debounce } from "lodash";
 import DeleteModel from "../Utils/DeleteModel";
 import ViewModelSlide from "../Utils/ViewModel";
 import { getUserList } from "../API/Api";
 import { userSelector } from "../redux/slice";
+import { debounce } from "../Constants";
 
 export default function UserList() {
   const navigate = useNavigate();
@@ -35,6 +35,12 @@ export default function UserList() {
   useEffect(() => {
     dispatch(getUserList());
   }, []);
+
+  const setDelay = useCallback(debounce((val)=>{
+    setSearch(val)
+  }
+, 2000), []);
+
   const handleCloseDeleteModel = () => {
     setOpenDeleteModel(false);
   };
@@ -89,9 +95,9 @@ export default function UserList() {
         >
           <InputBase
             placeholder="Search with Email"
-            onChange={debounce((e) => {
-              setSearch(e.target.value);
-            }, 2000)}
+            onChange={(e) => {   
+              setDelay(e.target.value);
+            }}
           />
         </Paper>
       </Span>
