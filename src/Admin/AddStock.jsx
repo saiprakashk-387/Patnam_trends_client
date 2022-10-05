@@ -18,7 +18,7 @@ import { addproductSelector } from "../redux/slice";
 
 const AddStockForm = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [material, setMaterial] = React.useState("");
   const [cloth, setCloth] = React.useState("");
   const [price, setPrice] = React.useState("");
@@ -40,12 +40,12 @@ const AddStockForm = () => {
   const Input = styled("input")({
     display: "none",
   });
-   const uploadImage = () => {
+  const uploadImage = () => {
     setLoading(true);
     const data = new FormData();
     for (let i = 0; i < image.length; i++) {
       data.append("file", image[i]);
-     }
+    }
     data.append("upload_preset", "lisuczwe");
     data.append("cloud_name", "dignfufky");
     fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
@@ -56,8 +56,8 @@ const AddStockForm = () => {
       .then((data) => {
         setUrl(data.url);
         setLoading(false);
-      })
-   };
+      });
+  };
   const uploadStock = async () => {
     let data = {
       material_type: material,
@@ -66,7 +66,7 @@ const AddStockForm = () => {
       status: status,
       product_image: url,
     };
-    dispatch(addstock(data,navigate));
+    dispatch(addstock(data, navigate));
     if (addProduct?.status === 200) {
       setMaterial("");
       setCloth("");
@@ -74,7 +74,9 @@ const AddStockForm = () => {
       setStatus("");
       setUrl("");
     }
-    
+  };
+  const closeModel = () => {
+    navigate("/admindashboard");
   };
   return (
     <div style={{ marginBottom: "4rem" }}>
@@ -206,7 +208,7 @@ const AddStockForm = () => {
               ) : image ? (
                 <Button variant="outlined">Upload Photo</Button>
               ) : (
-                <Button variant="outlined" disabled >
+                <Button variant="outlined" disabled>
                   Upload Photo
                 </Button>
               )}
@@ -254,6 +256,14 @@ const AddStockForm = () => {
           )}
         </>
       )}
+      <Button
+        sx={{ m: 4 }}
+        variant="outlined"
+        color="success"
+        onClick={closeModel}
+      >
+        Cancel
+      </Button>
     </div>
   );
 };

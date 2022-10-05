@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useCallback} from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,7 +12,6 @@ import Span from "@mui/material/Button";
 import InputBase from "@mui/material/InputBase";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { debounce } from "lodash";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import DeleteModel from "../Utils/DeleteModel";
@@ -21,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStockList } from "../API/Api";
 import { productSelector } from "../redux/slice";
 import Loader from "../Components/Loader/Loader";
+import { debounce } from "../Constants";
 
 const StockList = () => {
   const dispatch = useDispatch();
@@ -35,6 +35,12 @@ const StockList = () => {
   useEffect(() => {
     dispatch(getStockList());
   }, []);
+
+  const setDelay = useCallback(debounce((val)=>{
+    setSearch(val)
+  }
+, 2000), []);
+
   const handleCloseDeleteModel = () => {
     setOpenDeleteModel(false);
   };
@@ -68,7 +74,7 @@ const StockList = () => {
           return value;
         }
       });
-
+  
   return (
     <div
       style={{
@@ -89,9 +95,9 @@ const StockList = () => {
         >
           <InputBase
             placeholder="Search with Cloth ,Material -Type"
-            onChange={debounce((e) => {
-              setSearch(e.target.value);
-            }, 2000)}
+            onChange={(e) => {   
+              setDelay(e.target.value);
+            }}
           />
         </Paper>
       </Span>
