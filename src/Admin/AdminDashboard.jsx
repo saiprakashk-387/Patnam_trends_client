@@ -15,7 +15,7 @@ export default function AdminDashboard() {
  
   return (
     <Box>
-      <Box sx={{ display: "flex", columnGap: 5 }}>
+      <Box sx={{ display: "flex", columnGap: 5 ,width:"100%", justifyContent:"space-between"}}>
         <Card sx={{ display: "flex", backgroundColor: "#a8b18e3b" }}>
           <PeopleAltIcon sx={{ width: 50, height: 100, color: "#215b64" }} />
           <CardContent sx={{ backgroundColor: "#f3e7e700" }}>

@@ -11,8 +11,7 @@ export default function Cart() {
 
   useEffect(() => {
     dispatch(getCart());
-    // setCart(cart?.data);
-  }, []);
+   }, []);
 
   useEffect(() => {
     setCart(cart?.data);

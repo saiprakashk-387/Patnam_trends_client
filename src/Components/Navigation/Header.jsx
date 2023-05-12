@@ -26,8 +26,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { theme } from "../../theme/default";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutModel from "../Models/LogoutModel";
-import { editProfile } from "../../API/Api";
-import {  userEditProfileSelector } from "../../redux/slice";
+import { editProfile, getCart } from "../../API/Api";
+import {  cartSelector, userEditProfileSelector } from "../../redux/slice";
 
 const drawerWidth = 200;
 function Header(props) {
@@ -45,16 +45,17 @@ function Header(props) {
 
   const open = Boolean(translate);
    const { userEditProfile, isLoading, error } = useSelector(userEditProfileSelector);
+   const { cart } = useSelector(cartSelector);
     useEffect(() => {
     dispatch(editProfile());
+    dispatch(getCart());
   }, []);
-
-   useEffect(() => {
+    useEffect(() => {
     sessionStorage.setItem("userdetails", JSON.stringify(userEditProfile));
   }, [userEditProfile]);
 
   const handleClick = (event) => {
-    setTranslate(event.currentTarget);
+     setTranslate(event.currentTarget);
   };
 
   const handleDrawerToggle = () => {
@@ -86,6 +87,10 @@ function Header(props) {
   const handleCloseLogoutModel = () => {
     setOpenLogoutModel(false);
   };
+
+  const geticonClick=()=>{
+    navigate("/mycart");
+  }
   const handleOpenProfile = async () => {
     navigate("/myprofile");
     handleMenuClose();
@@ -136,7 +141,7 @@ function Header(props) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleClick}>
-        <Badge badgeContent={4} color="secondary">
+        <Badge badgeContent={cart?.data?.length} color="secondary">
           <ShoppingCartIcon />
         </Badge>
         <Typography>Translate</Typography>
@@ -208,17 +213,17 @@ function Header(props) {
 
           <Box sx={{ display: { xs: "none", md: "flex" }, marginLeft: "auto" }}>
           <IconButton size="large" aria-label="show 4 new mails">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={cart?.data?.length} color="secondary" onClick={()=>{geticonClick()}}>
               <ShoppingCartIcon />
             </Badge>
             </IconButton>
             <IconButton size="large" aria-label="show 4 new mails">
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={0} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton size="large" aria-label="show 17 new notifications">
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

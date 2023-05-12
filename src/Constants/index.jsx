@@ -1,4 +1,4 @@
-export const baseUrl =`${process.env.REACT_APP_PATNAM_TRENDS_API}` ;
+export const baseUrl =`http://localhost:5000/api` ;
 export const registerUrl= `${baseUrl}/register`;
 export const loginUrl=`${baseUrl}/login`;
 export const Url=`${baseUrl}/myuser`

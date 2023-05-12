@@ -10,15 +10,15 @@ import { DiamondCard, LiquidCard, RingProgressCard } from "./CardView";
 export default function FooterCards() {
   const style = {
     height: 300,
-    width: 200,
+    width: 250,
     backgroundColor: "#white",
     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
     padding: "10px",
   };
   return (
-    <Grid sx={{ flexGrow: 1, marginBottom: "4rem" }} container spacing={0}>
+    <Grid sx={{ flexGrow: 1, marginBottom: "4rem"}} container spacing={0}>
       <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={10}>
+        <Grid container justifyContent="space-between" spacing={10}>
           <Grid item>
             <Paper
               sx={style}

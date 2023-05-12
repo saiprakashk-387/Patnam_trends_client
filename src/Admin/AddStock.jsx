@@ -27,44 +27,57 @@ const AddStockForm = () => {
   const [image, setImage] = React.useState("");
   const [url, setUrl] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [images] = React.useState([]);
   const { addProduct, isLoading, error } = useSelector(addproductSelector);
 
+  // const handleImage = (e) => {
+  //   // setfile(e.target.files);
+  //   setImage(e.target.files);
+  // };
   const handleImage = (e) => {
-    // setfile(e.target.files);
-    setImage(e.target.files);
+    let files = e.target.files;
+    Object.values(files).map((val, i) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(val);
+      reader.onload = () => {
+        const imageslist = reader.result;
+        images.push({ list: imageslist });
+        setImage(val);
+      };
+    });
   };
-  const deleteImage = (indexval) => {
+   const deleteImage = (indexval) => {
     let allUsers = [...file];
     setfile(allUsers.filter((user, index) => index !== indexval));
   };
   const Input = styled("input")({
     display: "none",
   });
-  const uploadImage = () => {
-    setLoading(true);
-    const data = new FormData();
-    for (let i = 0; i < image.length; i++) {
-      data.append("file", image[i]);
-    }
-    data.append("upload_preset", "lisuczwe");
-    data.append("cloud_name", "dignfufky");
-    fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setUrl(data.url);
-        setLoading(false);
-      });
-  };
+  // const uploadImage = () => {
+  //   setLoading(true);
+  //   const data = new FormData();
+  //   for (let i = 0; i < image.length; i++) {
+  //     data.append("file", image[i]);
+  //   }
+  //   data.append("upload_preset", "lisuczwe");
+  //   data.append("cloud_name", "dignfufky");
+  //   fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
+  //     method: "post",
+  //     body: data,
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setUrl(data.url);
+  //       setLoading(false);
+  //     });
+  // };
   const uploadStock = async () => {
     let data = {
       material_type: material,
       cloth_type: cloth,
       price: `${price}`,
       status: status,
-      product_image: url,
+      product_image: images[0]?.list,
     };
     dispatch(addstock(data, navigate));
     if (addProduct?.status === 200) {
@@ -186,7 +199,8 @@ const AddStockForm = () => {
             </IconButton>
           </label>
           {
-            <span onClick={uploadImage}>
+            // <span onClick={uploadImage}>
+            <span>
               {loading ? (
                 <Button>
                   <LoadingButton
@@ -203,10 +217,8 @@ const AddStockForm = () => {
                     variant="contained"
                   >{``}</LoadingButton>
                 </Button>
-              ) : url ? (
+              ) : images[0]?.list ? (
                 <Button color="success">Photo Uploaded</Button>
-              ) : image ? (
-                <Button variant="outlined">Upload Photo</Button>
               ) : (
                 <Button variant="outlined" disabled>
                   Upload Photo
@@ -216,17 +228,17 @@ const AddStockForm = () => {
           }
         </Box>
       </Box>
-      {url && (
+      {images && (
         <div style={{ width: "100%" }}>
           <Avatar
             alt="Travis Howard"
-            src={`${url}`}
+            src={`${images[0]?.list}`}
             sx={{ width: 200, height: 200 }}
           />
         </div>
       )}
 
-      {material && cloth && price && status && url && (
+      {material && cloth && price && status && images && (
         <>
           {isLoading ? (
             <Button sx={{ m: 4 }}>

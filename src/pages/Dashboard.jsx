@@ -45,7 +45,7 @@ export default function Dashboard() {
   const handleCloseViewModel = () => {
     setView(false);
   };
-  return (
+   return (
     <Box sx={{ flexGrow: 1, marginBottom: "4rem" }}>
       <Grid
         container
@@ -63,10 +63,10 @@ export default function Dashboard() {
             <Grid item xs={2} sm={4} md={4} key={index}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
-                  // className="zoom"
-                  component="img"
+                   component="img"
                   height="250"
-                  image={`${val.product_image}?w=248&fit=crop&auto=format`}
+                  // image={`${val.product_image}?w=248&fit=crop&auto=format`}
+                  image={val.product_image}
                 />
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">

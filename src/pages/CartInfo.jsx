@@ -38,9 +38,6 @@ const CartInfo = (props) => {
     await dispatch(removeCartItem(id));
   };
 
-  //   const numberFormat = val =>
-  //   Number.isInteger(val) ? val : val.toFixed(2);
-
   return (
     <>
     <Paper

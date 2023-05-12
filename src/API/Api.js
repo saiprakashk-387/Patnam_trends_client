@@ -120,7 +120,7 @@ export const getCart = () => {
 };
 
 export const addCart = (val) => {
-  return (dispatch) => {
+   return (dispatch) => {
     axios
       .post(baseUrl + "/addcart", val, {
         headers: {
@@ -131,6 +131,7 @@ export const addCart = (val) => {
         },
       })
       .then((res) => {
+         toast.success(`${res.data.message}`)
         dispatch(cartListAction(res));
       })
       .catch((error) => {

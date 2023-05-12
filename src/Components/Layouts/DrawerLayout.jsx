@@ -12,6 +12,7 @@ export default function DrawerLayout({ children }) {
           width: "100%",
           padding: theme.spacing(3),
           marginTop: theme.spacing(8),
+          backgroundColor:"lightyellow"
         }}
       >
         {children}

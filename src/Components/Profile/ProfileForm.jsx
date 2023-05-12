@@ -16,14 +16,14 @@ import { editProfile, updateProfile } from "../../API/Api";
 import Loader from "../Loader/Loader";
 
 const ProfileForm = (props) => {
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { sample } = props;
   const [status, setStatus] = useState(false);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
-
-  const formik = useFormik({
+  const [images] = React.useState([]);
+   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       email: sample?.data?.email,
@@ -32,15 +32,16 @@ const ProfileForm = (props) => {
       lastname: sample?.data?.lastname,
       address2: sample?.data?.address2,
       address1: sample?.data?.address1,
-      photoUrl: url,
+      // photoUrl: url,
+      photoUrl: images[0]?.list,
     },
 
     onSubmit: async (Data, reset) => {
-      dispatch(
+       dispatch(
         updateProfile(
           Data,
           sample.data._id,
-          (Data.photoUrl = url ? url : sample.data.photoUrl)
+          // (Data.photoUrl = url ? url : sample.data.photoUrl)
         )
       );
       setTimeout(() => {
@@ -53,23 +54,36 @@ const ProfileForm = (props) => {
       }, 500);
     },
   });
-  const uploadImage = () => {
-    setStatus(true);
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "lisuczwe");
-    data.append("cloud_name", "dignfufky");
-    fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setUrl(data.url);
-        setStatus(false);
-      })
-      .catch((err) => console.log(err));
+
+  const handleImage = (e) => {
+    let files = e.target.files;
+    Object.values(files).map((val, i) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(val);
+      reader.onload = () => {
+        const imageslist = reader.result;
+        images.push({ list: imageslist });
+        setImage(val);
+      };
+    });
   };
+   // const uploadImage = () => {
+  //   setStatus(true);
+  //   const data = new FormData();
+  //   data.append("file", image);
+  //   data.append("upload_preset", "lisuczwe");
+  //   data.append("cloud_name", "dignfufky");
+  //   fetch("https://api.cloudinary.com/v1_1/dignfufky/image/upload", {
+  //     method: "post",
+  //     body: data,
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setUrl(data.url);
+  //       setStatus(false);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   const Input = styled("input")({
     display: "none",
   });
@@ -166,7 +180,8 @@ const ProfileForm = (props) => {
                     accept="image/*"
                     id="icon-button-file"
                     type="file"
-                    onChange={(e) => setImage(e.target.files[0])}
+                    // onChange={(e) => setImage(e.target.files[0])}
+                    onChange={(e) => handleImage(e)}
                   />
                   <IconButton
                     color="secondary"
@@ -178,7 +193,20 @@ const ProfileForm = (props) => {
                 </label>
               }
             >
-              {url ? (
+              {images[0]?.list ? (
+                <Avatar
+                  alt="Travis Howard"
+                  src={`${images[0]?.list}`}
+                  sx={{ width: 200, height: 200 }}
+                />
+              ) : (
+                <Avatar
+                  alt="Travis Howard"
+                  src={`${sample?.data?.photoUrl}`}
+                  sx={{ width: 200, height: 200 }}
+                />
+              )}
+              {/* {url ? (
                 <Avatar
                   alt="Travis Howard"
                   src={`${url}`}
@@ -190,19 +218,20 @@ const ProfileForm = (props) => {
                   src={`${sample?.data?.photoUrl}`}
                   sx={{ width: 200, height: 200 }}
                 />
-              )}
+              )} */}
             </Badge>
           </Stack>{" "}
           <br />
-          {image && (
-            <span onClick={uploadImage}>
-              {url ? (
+          {/* {image && ( */}
+            {/* <span onClick={uploadImage}> */}
+            <span >
+              {image ? (
                 <Button color="success">Photo Uploaded</Button>
               ) : (
                 <Button variant="outlined">Upload Photo</Button>
               )}
             </span>
-          )}
+          {/* )} */}
         </Box>
       </Box>
       {status ? (

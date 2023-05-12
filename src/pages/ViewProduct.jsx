@@ -43,7 +43,7 @@ export default function ViewProduct(props) {
             margin: "auto",
             flexGrow: 1,
             backgroundColor:"#e6e8f3" ,
-            marginBottom: "1rem",
+            marginBottom: "15rem",
             marginTop: "1rem",
             width: "50%",
             boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
